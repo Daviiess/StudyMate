@@ -6,6 +6,7 @@ dotenv.config()
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
+import protect from './middleware/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,9 +27,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+
+
 //Routes
 app.use('/api/auth' , authRoutes)
-
+app.use(protect);
 
 
 //connecting to the server

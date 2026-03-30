@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginPage from './pages/Auth/LoginPage';
-import RegisterPage from './pages/Auth/RegisterPage';
+import LoginPage from './pages/Auth/LoginPage/LoginPage.jsx';
+import RegisterPage from './pages/Auth/RegisterPage/RegisterPage.jsx';
 import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import DashBoardPage from './pages/Dashboard/DashBoardPage';
@@ -12,10 +12,10 @@ import FlashCardPage from './pages/FlashCards/FlashCardPage';
 import QuizTakePage from './pages/Quizzes/QuizTakePage';
 import QuizResultPage from './pages/Quizzes/QuizResultPage';
 import ProfilePage from './pages/Profile/ProfilePage';
+import { useAuth } from './context/AuthContext';
 
 const App = () => {
- const loading = false ; 
-const isAuthenticated = true;
+const {loading , isAuthenticated} = useAuth();
   if(loading){
     return (
       <div className=''>

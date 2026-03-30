@@ -25,7 +25,7 @@ export const registerUser = async(req, res, next) => {
             error: 'User already exists'
         })
     }
-    const user = User.createOne({
+    const user = await User.create({
         email,
         username,
         password,
@@ -128,4 +128,79 @@ try{
 }catch(error){
     next(error);
 }
+}
+export const getProfile = async(req, res , next) => {
+    try{
+        const user = await User.findById(req.user._id);
+            res.status(200).json({
+            success: true,
+            data: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                profileImage: user.profileImage,
+                currentStreak: user.currentStreak,
+                studyGoal: user.studyGoal,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
+            }
+        });
+
+    }catch(error){
+        next(error)
+    }
+}
+export const updateProfile = async(req, res, next) => {
+   try{
+    const {username , email , profileImage} = req.body;
+    const user = await User.findById(req.user._id);
+    if(username) user.username = username;
+    if(email) user.email = email;
+    if(profileImage) user.profileImage = profileImage;
+    await user.save();
+    res.status(200).json({
+        success: true,
+        data: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            profileImage: user.profileImage
+        },
+        message: "Profile updated successfully"
+    });
+    }catch(err){
+        next(err)
+    }
+}
+export const changePassword = async(req, res, next ) => {
+    try{
+        const {currentPassword , newPassword, confirmNewPassword} = req.body;
+        const user = await User.findById(req.user._id).select('+password');
+        if(currentPassword === newPassword){
+            return res.status(404).json({
+                success: false,
+                message: 'New password is the same \n select a new password',
+                statusCode: 404
+            });
+        }
+        if(confirmNewPassword !== newPassword){
+            return res.status(404).json({
+                success: false,
+                error: 'Confirmation password must match the new password. Please try again.',
+                statusCode: 404
+            })
+        };
+        const matchPassword = await user.matchPassword(currentPassword);
+        if(!matchPassword){
+            return res.status(401).json({
+                success: false,
+                error: 'Current password is incorrect',
+                statusCode: 404
+            });
+        };
+        user.password = newPassword;
+        await user.save();
+    }catch(error){
+        next(error)
+    }
 }
