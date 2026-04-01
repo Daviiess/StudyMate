@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import './LoginPage.scss'
 import authService from '../../../services/authService.js';
 import { useAuth } from '../../../context/AuthContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo1.png';
 import toast from 'react-hot-toast';
-import {BrainCircuit, Mail, Lock, ArrowRight} from 'lucide-react';
+import {Mail, Lock, ArrowRight} from 'lucide-react';
 const LoginPage = () => {
   const [email , setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,15 +13,28 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
    
+  useEffect(() => {
+       if(error){
+        const timer = setTimeout(() => {
+          setError(null)
+        }, 3000);
+  
+        return () => clearTimeout(timer)
+      }
+    }, [error])
+
   const {login} = useAuth();
   const navigate = useNavigate();
   const handleSubmit = async(e) => {
+    if(e) e.preventDefault();
+    setLoading(true);
     try{
       const {token , user} = await authService.login(email , password);  
       login(token , user);
+     
       toast.success('Login successful');
        navigate('/dashboard') 
-      setLoading(true)
+      
     }catch(error){
       setError(error.message || 'Failed to login. Please check your credentials');
       toast.error(error.message || 'Failed to login.')
@@ -52,7 +65,7 @@ const LoginPage = () => {
              className='login__input'
              onFocus={() => setFocusedField('email')}
              onBlur={() => setFocusedField(null)}
-             onChange={(e) => setEmail(e.target.value)} 
+             onChange={(e) => setEmail(e.target.value.trim())} 
                />
              </div>
         </div>
@@ -61,11 +74,11 @@ const LoginPage = () => {
               <div className='login__input-wrapper'>
             <Lock className={`${focusedField === 'password' ? 'focus' : ''}`}/>
             <input type="password"
-             placeholder='*********'
+             placeholder='******'
              className='login__input'
              onFocus={() => setFocusedField('password')}
              onBlur={() => setFocusedField(null)}
-             onChange={(e) => setPassword(e.target.value)}  
+             onChange={(e) => setPassword(e.target.value.trim())}  
               />
               </div>
         </div>

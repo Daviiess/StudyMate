@@ -36,7 +36,7 @@ const documentSchema = new mongoose.Schema({
     ],
     uploadDate:{
         type: Date,
-        default: date.now
+        default: Date.now
     },
     status:{
         type: String,

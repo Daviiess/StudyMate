@@ -2,7 +2,9 @@ import express, { Router } from 'express';
 import {body} from 'express-validator'
 import protect from '../middleware/auth.js';
 import { changePassword, getProfile, LoginUser, registerUser, updateProfile } from '../controller/authController.js';
+
 const router = express.Router();
+
 const registerValidation = [
     body('username')
     .trim()
@@ -18,9 +20,18 @@ const registerValidation = [
     .isLength({min: 6})
     .withMessage('Password must have atleast 6 characters')
 ];
-
+const loginValidation = [
+    body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Please provide a valid email'),
+    body('password')
+    .notEmpty()
+    .withMessage('Password is required')
+   
+]
 router.post('/register' , registerValidation, registerUser)
-router.post('/login' , registerValidation, LoginUser)
+router.post('/login' , loginValidation, LoginUser)
 
 
 
