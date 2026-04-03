@@ -36,8 +36,8 @@ const RegisterPage = () => {
     setError(null);
     
     try {
-      const { token, user } = await authService.register(username, email, password, studyGoal);  
-      login(token, user);
+      const response = await authService.register(username, email, password, studyGoal);  
+      login( response.data.user, response.data.token);
       toast.success('Account created successfully!\n Please login to continue');
       navigate('/login');
     } catch (error) {
@@ -140,7 +140,7 @@ const RegisterPage = () => {
                   </>
                 ) : (
                   <>
-                    Sign up
+                    Create an account
                     <ArrowRight/>
                   </>
                 )}
@@ -157,11 +157,11 @@ const RegisterPage = () => {
             </div>
           </form> 
         </div>
-
+          </div>
         <p className='policy-text'>
           By continuing, you agree to our Terms & Privacy Policy
         </p>
-      </div>
+      
     </div>
   )
 }

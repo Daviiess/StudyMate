@@ -10,7 +10,7 @@ import { BASE_URL } from "./apiPaths";
 });
 
  //request interceptors
-  axios.interceptors.request.use(function (config) {
+  axiosInstance.interceptors.request.use(function (config) {
     const accessToken = localStorage.getItem("token");
     if(accessToken){
         config.headers.Authorization = `Bearer ${accessToken}`
@@ -22,7 +22,7 @@ import { BASE_URL } from "./apiPaths";
 );
 
 //response interceptors
-axios.interceptors.response.use(function onFulfilled(response) {
+axiosInstance.interceptors.response.use(function onFulfilled(response) {
     return response;
   }, function onRejected(error) {
     if (error.response.status === 500) {

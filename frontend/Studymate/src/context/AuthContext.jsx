@@ -6,7 +6,7 @@ export const useAuth = () => {
     const context = useContext(AuthContext);
     if(!context){
         throw new Error("useAuth must be used within an auth provider");
-    }
+}
     return context;
 }
 
@@ -21,17 +21,31 @@ export const AuthProvider = ({children}) => {
 
     const checkAuthStatus = () => {
      try { 
+         
          const token = localStorage.getItem("token");
          const userStr = localStorage.getItem('user');
-         if(token && userStr){
+
+        const isValidToken = token && token !== "undefined";
+        const isValidUser = userStr && userStr !== "undefined";
+
+         if(isValidToken && isValidUser){
                 const userData = JSON.parse(userStr);
                 setUser(userData);
                 setIsAuthenticated(true);
+            }else{
+                setUser(null);
+                setIsAuthenticated(false);
             }
         
     }catch(error){
         console.error("Auth check failed:" , error);
-        logout();
+        setUser(null);
+        console.error("Auth check failed:", error);
+    // Just clear the local states, don't force a redirect here
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
+    setIsAuthenticated(false);
     }finally{
         setLoading(false);
     }
@@ -45,10 +59,11 @@ export const AuthProvider = ({children}) => {
         setLoading(false);
     }
     const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setIsAuthenticated(false);
+       localStorage.removeItem("user");
+        localStorage.removeItem("token");
         setUser(null);
+        setIsAuthenticated(false);
+        window.location.href = '/';
     }
     const updateUser = (updatedUserData) => {
         const newUserData = {...user, ...updatedUserData };

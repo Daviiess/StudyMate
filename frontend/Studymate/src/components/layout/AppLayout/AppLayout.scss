@@ -1,0 +1,10 @@
+.app-layout{
+    display: flex;
+    
+    min-height: inherit;
+
+    &__content{
+        flex: 1;
+       
+}
+}

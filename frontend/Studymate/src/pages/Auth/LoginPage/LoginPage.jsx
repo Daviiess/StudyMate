@@ -29,11 +29,12 @@ const LoginPage = () => {
     if(e) e.preventDefault();
     setLoading(true);
     try{
-      const {token , user} = await authService.login(email , password);  
-      login(token , user);
-     
-      toast.success('Login successful');
-       navigate('/dashboard') 
+      const response = await authService.login(email , password); 
+      console.log(response.data.token)
+
+      login(response.data.user , response.data.token); 
+       toast.success('Login successful');
+       navigate('/dashboard')  
       
     }catch(error){
       setError(error.message || 'Failed to login. Please check your credentials');

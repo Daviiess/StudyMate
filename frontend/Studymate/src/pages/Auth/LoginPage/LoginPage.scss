@@ -1,185 +1,192 @@
 @use '../../../components/styles/abstracts/variables' as *;
-.main-container{
+
+.main-container {
     display: flex;
     min-width: 100vw;
     min-height: 100vh;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-     background: radial-gradient(
-    circle at 50% 50%, 
-    $color_white 0%, 
-    rgba($color_white, 0.05) 50%, 
-    rgba($color-Accent, 0.1) 100%
-  ); 
+    background: radial-gradient(
+        circle at 50% 50%, 
+        $color_white 0%, 
+        rgba($color_white, 0.05) 50%, 
+        rgba($color-Accent, 0.1) 100%
+    ); 
+    
+    .policy-text{
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+    color: #454646;
 }
-.main-container--bg{
-/* box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.08);
-border: 1px solid rgba(0, 0, 0, 0.03); */
-background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-  backdrop-filter: blur(10px);          /* Blurs the background behind the card */
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 20px 40px rgba($color-Accent, 0.1);
-padding: 3.5rem 3.5rem 5rem 3.5rem;
-border-radius: 1rem;
 }
-.login{
-    width: 20rem;
-  .logo{
-  width: 6.5rem;
-  height: 6.5rem;
- margin-top: 2rem;
-  &__img{
-    width: 100%; 
-  display: block;
-  transform: scale(1.8); // Adjust this number until the space disappears
-  object-fit: contain;
-  }
+
+.main-container--bg {
+    background: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(10px);         
+    border: $main-border;
+    box-shadow: 0 3.2rem 6.4rem rgba($color-Accent, 0.8);
+    padding: 6rem 6rem 8.3rem 6rem;
+    border-radius: 1.6rem;
 
 }
 
-    &__header{
+.login {
+    width: 32rem;
+    
+    .logo {
+        width: 10.4rem;
+        height: 10.4rem;
+        margin-top: 3.2rem;
+        
+        &__img {
+            width: 100%; 
+            display: block;
+            transform: scale(1.8); 
+            object-fit: contain;
+        }
+    }
+
+    &__header {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1.5rem;
-        &--h1{
-            font-size: 1.4rem;
+        margin-bottom: 2.4rem;
+        
+        &--h1 {
+            font-size: 2.24rem;
             color: $primary-text;
         }
-        &--text{
-            font-size: .9rem;
+        &--text {
+            font-size: 1.44rem;
             color: $primary-subtle;
         }
-
     }
    
-    &__input-holder{
-        margin-bottom: 1rem;
-        
+    &__input-holder {
+        margin-bottom: 1.6rem;
     }
-    &__label{
+    
+    &__label {
         display: block;
-        font-size: .75rem;
+        font-size: 1.2rem;
         font-weight: 400;
-        letter-spacing: 1px;
-        margin-bottom: .2rem;
-
+        letter-spacing: 0.16rem;
+        margin-bottom: 0.32rem;
     }
-    &__input-wrapper{
+    
+    &__input-wrapper {
         display: flex;
         align-items: center;
-        gap: .8rem;             
+        gap: 1.28rem;             
         background: #FFFFFF;
-        border: 1px solid #E8EBF3;
-        border-radius: 12px;
-        padding: .5rem 1.3rem;   
+        border: 0.16rem solid #E8EBF3;
+        border-radius: 1.92rem;
+        padding: 0.8rem 2.08rem;   
         transition: all 0.3s ease;
 
-  &:focus-within {
-    border-color: $color-Accent; /* StudyMate Purple */
-    box-shadow: 0 0 0 2px rgba(106, 50, 159, 0.1);
-  }
-        
+        &:focus-within {
+            border-color: $color-Accent;
+            box-shadow: 0 0 0 0.1rem rgba(106, 50, 159, 0.1);
+        }
     }
-     &__input{
+    
+    &__input {
         background: transparent;
         border: none;
-        padding: .5rem;
+        padding: .8rem 1rem;
         width: 100%;
         height: 100%;
         display: flex;
        
-        &:focus{
+        &:focus {
             outline: none;
         }
-       
     }
-    .focus{
+
+    .focus {
         color: $color-Accent;
     }
-  &__btn{
-    width: 100%;
-    border: none;
-    padding: .5rem 1rem;
-    background: $color-Primary;
-    border-radius: 1rem;
-    display: inline-block;
-    cursor: pointer;
-    transition: all .4s ;
 
-    &:hover{
-    transform: translateY(-2px); 
-    background-color: $color-Primary-Dark;
-    
+    &__btn {
+        width: 100%;
+        border: none;
+        padding: 0.8rem 1.6rem;
+        background: $color-Primary;
+        border-radius: 1.6rem;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.4s;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+
+        &:hover {
+            transform: translateY(-0.32rem); 
+            background-color: $color-Primary-Dark;
+        }
+
+        &:active {
+            transform: translateY(0.32rem); 
+            box-shadow: 0 0.32rem 0.64rem rgba(0, 17, 15, 0.2); 
+            filter: brightness(0.9); 
+        }
+
+        &--span {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: $color_white;
+        }
     }
 
-    &:active {
-    transform: translateY(2px); 
-    box-shadow: 0 2px 4px rgba(0, 17, 15, 0.2); 
-    filter: brightness(0.9); 
-   }
-   &--span{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: $color_white;
-   }
-  }
-
-  &__error{
-    border: 1px solid #E11D48;
-    transition: all .4s;
-    color: #BE123C;
-    padding: 1rem;
-    text-align: center;
-    border-radius: .5rem;
-    margin-bottom: 1rem;
-    
-    
-    &--text{
-        font-size: 1rem;
-        font-weight: 600;
+    &__error {
+        border: 0.16rem solid #E11D48;
+        transition: all 0.4s;
+        color: #BE123C;
+        padding: 1.6rem;
+        text-align: center;
+        border-radius: 0.8rem;
+        margin-bottom: 1.6rem;
+        
+        &--text {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
     }
-  }
 
-  &__footer{
-    margin-top: 1rem;
-    font-size: .8rem;
-    font-weight: 500;
-  }
+    &__footer {
+        margin-top: 1.6rem;
+        font-size: 1.28rem;
+        font-weight: 500;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        border-top: $main-border;
+        padding: 2rem 0 0 0;
+        margin-bottom: .5rem;
+    }
 
-  &__link{
-    
-    color: $color-Primary;
-    text-decoration: none;
-
-  }
+    &__link {
+        color: $color-Primary;
+        text-decoration: none;
+    }
 }
 
 .loading-spinner {
-  width: 16px;          
-  height: 16px;
-  border-radius: 50%;   
-  margin-right: .35rem;
-
-  border: 2px solid rgba(255, 255, 255, 0.3); 
-  
-
-  border-top-color: #ffffff; 
-  
-
-  animation: spin 0.8s linear infinite;
-  
-  display: inline-block;
-  vertical-align: middle;
+    width: 1.5rem;          
+    height: 1.5rem;
+    border-radius: 50%;   
+    margin-right: 0.56rem;
+    border: 0.32rem solid rgba(255, 255, 255, 0.3); 
+    border-top-color: #ffffff; 
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
 }
-.policy-text{
-    margin-top: .5rem;
-    font-size: .8rem;
-}
+
+
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }

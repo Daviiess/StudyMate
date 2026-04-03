@@ -1,0 +1,97 @@
+@use '../../../components/styles/abstracts/variables' as *;
+
+/* 
+
+  <div className='header'>
+        <div className='header__bell'>
+            <Bell className='bell-icon'/>
+            <span className='notification-dot'></span>
+        </div>
+        {/* User Profile }
+        <div className='header__profile'>
+            <div className='header__profile--icon'>
+                <User size={20} className='user-icon' strokeWidth={2}/>
+                
+            </div>
+            <div className='header__profile--name'>
+                <p>Alex</p>
+                <p>alex@gmail.com</p>
+            </div>
+        </div>
+    </div>
+*/
+
+.header{
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 
+              0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  border: $main-border;
+  
+
+  &__bell{
+   
+   cursor: pointer;
+    transition: all .4s;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 2rem;
+    &:hover{
+        background-color: #e7e5e5;
+    }
+
+    .bell-icon{
+    color: #4b5563;
+    }
+    .notification-dot{
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $color-Primary;
+        right: 28%;
+        top: 19%;
+    }
+  }
+
+  &__divider {
+    width: 1px;
+    height: 6rem; 
+    background-color: #e5e7eb;
+  }
+
+  &__profile{
+    display: flex;
+    gap: 1rem;
+    padding: 0 1rem;
+    align-items: center;
+    cursor: pointer;
+    transition: all .4;
+     &:hover{
+        background-color: $border-color;
+    }
+    .user-icon{  
+      width: 3.2rem;
+      height: 3.2rem;
+      background-color: $color-Primary; 
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+      padding: .5rem;   
+    }
+    .header__email{
+        color:#49494a;
+    }
+    .header__name{
+        display: block;
+        font-size: 1.3rem;
+        font-weight: 500;
+
+    }
+  }
+}

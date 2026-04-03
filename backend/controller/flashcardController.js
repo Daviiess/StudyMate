@@ -4,10 +4,11 @@ export const getAllFlashCardSets = async(req, res, next) => {
     try{
         const flashcardSets = await Flashcard.find({
             userId: req.user._id,
-        })
+        }).select('-cards')
         .populate('documentId' , 'title')
         .sort({createdAt: -1});
 
+        
         res.status(200).json({
             success: true,
             count: flashcardSets.length,
@@ -22,7 +23,7 @@ export const getAllFlashCardSets = async(req, res, next) => {
     try{
         const flashcardSets = await Flashcard.find({
             userId: req.user._id,
-            documentId: req.params.id
+            documentId: req.params.documentId
         })
         .populate('documentId', 'title fileName')
         .sort({createdAt: -1});
@@ -42,11 +43,11 @@ export const getAllFlashCardSets = async(req, res, next) => {
         const { setId, cardId } = req.params; 
 
         const flashcardSet = await Flashcard.findOne({
-            _id: setId, // Find the "Stack" directly (Fast!)
+            _id: setId, 
             userId: req.user._id
         });
         if(!flashcardSet){
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 error: 'Flashcard set or card not found',
                 statusCode: 404
@@ -63,11 +64,8 @@ export const getAllFlashCardSets = async(req, res, next) => {
 
         flashcardSet.cards[cardIndex].lastReviewed = new Date();
         flashcardSet.cards[cardIndex].reviewCount += 1;
-        
-        if (flashcardSet.cards[cardIndex].reviewCount >= 3) {
-            flashcardSet.cards[cardIndex].isMastered = true;
-        }
-
+        flashcardSet.cards[cardIndex].isMastered = flashcardSet.cards[cardIndex].reviewCount >= 3
+       
         await flashcardSet.save();
 
         res.status(200).json({
@@ -84,7 +82,7 @@ export const getAllFlashCardSets = async(req, res, next) => {
         const { setId, cardId } = req.params; 
 
         const flashcardSet = await Flashcard.findOne({
-            _id: setId, // Find the "Stack" directly (Fast!)
+            _id: setId,
             userId: req.user._id
         });
     if(!flashcardSet){
@@ -97,7 +95,7 @@ export const getAllFlashCardSets = async(req, res, next) => {
     const cardIndex = flashcardSet.cards.findIndex(card => card._id.toString() === cardId);
     if(cardIndex === -1){
         return res.status(404).json({
-            success: true,
+            success: false,
             error:"Card not found",
             statusCode: 404
         });

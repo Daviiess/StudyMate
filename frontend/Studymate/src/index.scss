@@ -5,9 +5,14 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-body{
+html{
     font-size: 62.5%;
-    font-family: "Urbanist", sans-serif;
+    box-sizing: border-box;
+
+}
+body{
    
+    font-family: "Urbanist", sans-serif;
+   /*  width: 100vw;
+    min-height: 100vh; */
 }

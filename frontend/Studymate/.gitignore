@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Security and Analysis Reports
+scan_report.txt
+*-report.txt
+
+# Local Security Scripts
+stepsecurity-dev-machine-guard.sh
+*.sh

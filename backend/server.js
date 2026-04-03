@@ -9,6 +9,10 @@ import authRoutes from './routes/authRoutes.js'
 import protect from './middleware/auth.js';
 import documentRoutes from './routes/documentRoutes.js';
 import flashcardRoutes from './routes/flashcardRoutes.js';
+import quizRoutes from './routes/quizRoutes.js'
+import aiRoutes from './routes/aiRoutes.js';
+import progressRoutes from './routes/progressRoutes.js';
+
 import errorHandler from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,7 +40,11 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api/auth' , authRoutes)
 app.use('/api/documents' , documentRoutes)
 app.use('/api/flashcards' , flashcardRoutes);
+app.use('/api/quizzes' , quizRoutes);
+app.use('/api/ai' , aiRoutes);
+app.use('/api/progress', progressRoutes);
 app.use(protect);
+
 app.use(errorHandler)
 
 //connecting to the server
