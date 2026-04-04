@@ -1,0 +1,34 @@
+
+.empty-state-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc, #ffffff, #f8fafc);
+
+  &__content {
+    text-align: center;
+  }
+
+  &__icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10.24rem;  
+    height: 10.24rem; 
+    border-radius: 2.56rem; 
+    background-color: #f1f5f9; 
+    margin-bottom: 1.6rem;
+  }
+
+  &__icon {
+    width: 5.12rem; 
+    height: 5.12rem;
+    color: #94a3b8; 
+  }
+
+  &__text {
+    color: #475569; 
+    font-size: 1.44rem; 
+  }
+}

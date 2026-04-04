@@ -28,7 +28,7 @@
   justify-content: flex-end;
   width: 100%;
   border: $main-border;
-  
+  background-color: #fff;
 
   &__bell{
    
@@ -65,7 +65,7 @@
   &__profile{
     display: flex;
     gap: 1rem;
-    padding: 0 1rem;
+    padding: 0 2rem;
     align-items: center;
     cursor: pointer;
     transition: all .4;

@@ -34,15 +34,15 @@ export const getDashboard = async(req, res, next) => {
 
        //Recent activity
        const recentDocuments = await Document.find({userId})
-       .sort({lastAccessed: -1})
+       .sort({createdAt: -1})
        .limit(5)
-       .select('title fileName lastAccessed status');
+       .select('title fileName createdAt status');
 
        const recentQuizzes = await Quiz.find({userId})
        .sort({createdAt: -1})
        .limit(5)
        .populate('documentId', 'title')
-       .select('title score totalQuestions completedAt');
+      .select('title score totalQuestions completedAt createdAt');
 
        const studyStreak = Math.floor(Math.random() * 7) + 1;
        res.status(200).json({

@@ -1,8 +1,243 @@
+@use '../../components//styles/abstracts/variables' as *;
+@use '../../components/styles/abstracts/utils/utilities' as *;
 .dashboard{
-    
     display: flex;
     flex: 1;
     height: 100%;
-    justify-content: center;
-    align-items: center;
+     padding: 3rem 3rem 0 3rem;
+    flex-direction: column;
+    gap: 3rem;
+    background-color: #f8fafc;
+
+    &__header{
+        
+        &--heading{
+                font-size: 2.5rem;
+                text-transform: capitalize;
+                color: $color-grey-dark;
+                margin-bottom: .5rem;
+        }
+        &--text{
+            font-size: 1.5rem;
+            color: $color-grey-medium;
+            font-weight: 400;
+        }
+    }
+
+    &__stats{
+        display: flex;
+        padding: 0 3rem;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+       
+    }
+        &__card{
+            border: $main-border;
+            display: flex;
+            flex: 0 0 33.3%;
+            padding: 2rem;
+            flex-direction: column;
+            position: relative;
+            height: 15rem;
+            justify-content: center;
+            background-color: #fff;
+            align-items: start;
+            border-radius: 2rem;
+            box-shadow: 0 1.6rem 4.8rem -0.8rem rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all .3s ;
+            &:hover{
+                transform: translateY(-10px);
+            }
+
+           &--text{
+            font-size: 1.4rem;
+            color: $color-grey-medium;
+            display: block;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+           } 
+           &--value{
+            font-size: 2.5rem;
+            font-weight: 500;
+           }
+            &--icon-wrapper{
+                width: 3.5rem;
+                height: 3.5rem;
+                position: absolute;
+                right: 2rem;
+                top: 2rem; 
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px; 
+                padding: .8rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+                
+                &--quizzes{
+                    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+                    box-shadow: 0 1.28rem 3.2rem -0.8rem rgba(16, 185, 129, 0.4);
+                }
+                &--documents{
+                    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+                    box-shadow: 0 1.28rem 3.2rem -0.8rem rgba(14, 165, 233, 0.45);
+                }
+                 &--flashcards{
+                    background: linear-gradient(135deg, #f472b6 0%, #db2777 100%);
+                    box-shadow: 0 1.28rem 3.2rem -0.8rem rgba(219, 39, 119, 0.4);
+                 }   
+           
+        }
+        }
+
+
+
+    &__recent-activity{
+        box-shadow: 0 1.6rem 4.8rem -0.8rem rgba(0, 0, 0, 0.08);
+        border: $main-border;
+        border-radius: 1rem;
+        
+        &--header{
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            gap: 1rem;
+            font-size: 1.8rem;
+        }
+        &--icon-wrapper{
+            background-color: $color-grey-light;
+            width: 35px;
+            height: 35px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 1rem;
+        }
+    }
+
+    &__container{
+        padding: 0 2rem;
+        height: calc(100vh - 43rem);
+        overflow-y: scroll; 
+       
+    }
+    &__documents{
+        border: $small-border;
+        box-shadow: 0 1.6rem 4rem -1.6rem rgba(71, 85, 105, 0.15);
+        padding: 2rem;
+        margin-bottom: 1rem;
+        list-style: none;
+        border-radius: 1rem;
+        background-color: #fff;
+        transition: all .5s;
+       
+        
+        &:hover{
+            box-shadow: 0 3.2rem 6.4rem -1.2rem rgba(71, 85, 105, 0.2);
+            transform: translateY(-.5px);
+        }
+        
+    }
+
+    &__activity-info{
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        align-items: center;
+
+        .dashboard-dot{
+            width: 10px;
+            background-color: $color-Primary;
+            position: absolute;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            top: .4rem;
+            box-shadow: 0 0 .1rem 0.1rem rgba($color-Accent, 0.4);
+            
+        }   
+        &--text{
+            display: block;
+            font-size: 1.35rem;
+            text-transform: capitalize;
+            margin-bottom: 1rem;
+            padding: 0 1.5rem;
+        }
+        
+        &--date{
+           padding: 0 1.5rem;
+           letter-spacing: .5px;
+           font-weight: 400;
+
+        }
+    }
+    &__view-btn{
+        color: $color-Primary;
+        font-size: 1.3rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 0.64rem 1.6rem -0.64rem rgba($color-Accent, 0.15);  
+        
+    }
 }
+
+
+//empty activity
+
+.activity-empty {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 3.2rem; 
+  background-color: #ffffff;
+  border-radius: 1.6rem;
+  border: 1px dashed #e2e8f0; 
+
+  &__icon-circle {
+    width: 4.8rem;
+    height: 4.8rem;
+    background-color: #f8fafc;
+    color: #94a3b8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    color: #475569;
+    font-size: 1.6rem; 
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  &__subtitle {
+    color: #94a3b8;
+    font-size: 1.28rem; 
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

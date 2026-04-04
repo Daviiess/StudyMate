@@ -1,7 +1,7 @@
 import React from 'react'
 import './Sidebar.scss';
 import logo from '../../../assets/logo1.png';
-import { LayoutDashboard, FileText, BookOpen, User } from 'lucide-react';
+import { LayoutDashboard, FileText, BookOpen, User, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../context/AuthContext';
 import { NavLink } from 'react-router-dom';
@@ -43,9 +43,9 @@ const Sidebar = () => {
         })}
       </ul>
 
-      <div>
-        <button onClick={handleLogout}>
-            logout
+      <div className='sidebar__logout-holder'>
+        <button onClick={handleLogout} className='sidebar__logout-holder--btn'>
+           <LogOut/> logout
         </button>
       </div>
     </div>
