@@ -45,6 +45,9 @@ const documentSchema = new mongoose.Schema({
     status:{
         type: String,
         enum: ['processing' , 'ready' , 'failed']
+    },
+    fileSize:{
+        type: Number,
     }
 },{
     timestamps: true

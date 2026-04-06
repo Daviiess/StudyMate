@@ -5,22 +5,22 @@ import RegisterPage from './pages/Auth/RegisterPage/RegisterPage.jsx';
 import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import DashBoardPage from './pages/Dashboard/DashBoardPage';
-import DocumentListPage from './pages/Documents/DocumentListPage';
-import DocumentDetailsPage from './pages/Documents/DocumentDetailsPage';
+import DocumentListPage from './pages/Documents/DocumentList/DocumentListPage';
+import DocumentDetailsPage from './pages/Documents/DocumentDetails/DocumentDetailsPage';
 import FlashcardsListPage from './pages/FlashCards/FlashcardsListPage';
 import FlashCardPage from './pages/FlashCards/FlashCardPage';
 import QuizTakePage from './pages/Quizzes/QuizTakePage';
 import QuizResultPage from './pages/Quizzes/QuizResultPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import { useAuth } from './context/AuthContext';
+import Spinner from './components/common/Spinner/Spinner.jsx';
 
 const App = () => {
 const {loading , isAuthenticated} = useAuth();
   if(loading){
     return (
-      <div className=''>
-        <p>Loading...</p>
-      </div>
+       <Spinner/>
+
     )
   }
   return (

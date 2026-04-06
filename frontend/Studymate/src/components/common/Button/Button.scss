@@ -1,0 +1,25 @@
+@use '../../../components/styles/abstracts/variables' as *;
+.button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    gap: .5rem;
+    padding: 1rem 1.3rem;
+    background: linear-gradient(to right, rgba($color-Primary, .8), rgba($color-Accent,.8));
+    border-radius: .8rem;
+    color: #fff;
+    box-shadow: 0 0.8rem 2rem -0.8rem rgba($color-Accent, 0.4);
+    transition: all .4s ease-in-out;
+    cursor: pointer;
+    &:hover {
+    transform: translateY(-0.32rem);
+    box-shadow: 0 1.2rem 2.4rem -0.64rem rgba($color-Accent, 0.6);
+    background: linear-gradient(to right, $color-Primary, $color-Accent);
+  }
+
+  &:active {
+    transform: translateY(-0.16rem) scale(0.98);
+    box-shadow: 0 0.4rem 1.2rem -0.4rem rgba($color-Accent, 0.5);
+  }
+}

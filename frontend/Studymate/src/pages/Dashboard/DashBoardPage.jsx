@@ -11,11 +11,13 @@ const DashBoardPage = () => {
   const [dashboardData , setDashboardData] = useState(null);
   const [loading, setLoading] = useState(false);
 
+ 
   useEffect(() => {
     const fetchDashboardData = async () => {
       
       try{
         const response = await progressService.getDashboardData();
+        setLoading(true);
         console.log("response data: ", response.data);
         setDashboardData(response.data);
        
@@ -38,6 +40,7 @@ if (!dashboardData || !dashboardData?.overview) {
    <EmptyDashboard/>
   );
 }
+
 
   const stats = [
     {
@@ -125,6 +128,24 @@ if (!dashboardData || !dashboardData?.overview) {
   }
 ]; */
 
+const activities = [
+  ...(dashboardData?.recentActivity?.documents || []).map((doc) => ({
+    id: doc._id,
+    description: doc.title,
+    timestamp: doc.createdAt || doc.uploadDate,
+    link:  `/documents/${doc._id}`,
+    type: 'document'
+  })),
+  ...(dashboardData?.recentActivity?.quizzes|| []).map((quiz) => ({
+    id: quiz._id,
+    description: quiz.title,
+    timestamp: quiz.completedAt,
+    link: `/quiz/${quiz._id}`,
+    type: 'quiz'
+  }))
+].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+ .slice(0, 8);
+
   const formatTimestamp = (dateString) => {
   if (!dateString) return "Date unknown";
   
@@ -193,18 +214,23 @@ if (!dashboardData || !dashboardData?.overview) {
           <span>Recent Activity</span>
         </div>
         <ul className="dashboard__container">
-          {recentActivity.map((activity) => {
+          {activities.map((activity) => {
             return (
-              <li key={activity._id} className='dashboard__documents'>
+              <li key={`${activity.type}-${activity.id}`} className='dashboard__documents'>
                 <div className='dashboard__activity-info'>
                   <div>
-                  <span className='dashboard-dot'></span>
-                  <span className='dashboard__activity-info--text'>Accessed Document: <span className='u-color-grey'>{activity.title}</span></span>
-                  <span className='dashboard__activity-info--date'>{formatTimestamp(activity.createdAt)}</span>
+                  <span className={`dashboard-dot dashboard-dot--${activity.type}`} ></span>
+                  <span className='dashboard__activity-info--text'> {activity.type === 'document' ? 'Accessed document: ' : 'Accessed quiz: '}  <span className='u-color-grey'>{activity.description}</span> </span>
+                  <span className='dashboard__activity-info--date'>
+                    {new Date(activity.timestamp).toLocaleString('en-GB', {
+                    day: '2-digit', month: '2-digit', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                      })}
+                </span>
                   </div>
                   <div>
-                  <span className='dashboard__view-btn'>
-                  view
+                  <span className={`dashboard__view-btn dashboard__view-btn--${activity.type}`}>
+                  view 
                 </span>
                 </div>
                 </div>
@@ -217,5 +243,5 @@ if (!dashboardData || !dashboardData?.overview) {
     </div>
   )
 }
-
+ 
 export default DashBoardPage

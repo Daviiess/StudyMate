@@ -1,0 +1,121 @@
+@use '../styles/abstracts/variables' as *;
+.document-card{
+    background: #fff;
+    border: $main-border;
+    border-radius: 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: all .5s;
+    max-height: 25rem;
+    box-shadow: 0 .6rem 2.4rem -0.4rem rgba(0, 0, 0, 0.08);
+    &:hover {
+        background-color: rgba($color-Accent, .1);
+    }
+    &:hover &__delete{
+        opacity: 1;
+    }
+    &__flex{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 1rem;
+    }
+
+    &__icon-wrapper{
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(to right, rgba($color-Primary, .8) , rgba($color-Accent, .8));
+        padding: .8rem;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        border-radius: .5rem;
+        color: $color_white;
+        box-shadow: 0 1.6rem 4rem -1.6rem rgba(71, 85, 105, 0.15);
+// A deep, soft shadow that looks very "premium"
+
+    }
+    &__title{
+        font-size: 1.7rem;
+        font-weight: 600;
+        margin-bottom: .5rem;
+        text-transform: capitalize;
+    }
+    &__size{
+        font-size: 1.2rem;
+        color: $color-grey-medium;
+        margin-bottom: .5rem;
+    }
+    &__activity-holder{
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    &__flashcards-holder{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: .5rem 1rem .5rem .5rem;
+        background-color: $color_white;
+        border-radius: 1rem;
+        color: rgba($color-Primary, .9);
+        font-weight: 600;
+        
+    }
+    &__quizzes-holder{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: .5rem 1rem .5rem .5rem;
+        color: rgb(52, 211, 153) ;
+        font-weight: 600;
+        background-color: rgba($color_white, .7);
+        border-radius: 1rem;
+    }
+    &__footer{
+        border-top: $main-border;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        padding: 1rem 1rem 1rem 0;
+
+    }
+    &__footer-items{
+       display: flex;
+       align-items: center;
+       margin-top: .5rem;
+       gap: .5rem;
+       color: $color-grey-medium;
+       font-weight: 500;
+    }
+    &__delete{
+        position: absolute;
+        right: 2rem;
+        top: 2.5rem;
+        opacity: 0;
+        color: rgba($color-Primary, .8);
+        box-shadow: 0 0 .5rem rgba(0, 0, 0, .4);
+        border-radius: .5rem;
+        padding: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .4s;
+        border: none;
+        cursor: pointer;
+        &:hover{
+            transform: translateY(-5px);
+        }
+        &:active{
+            transform: translateY(0);
+        }
+    }
+}

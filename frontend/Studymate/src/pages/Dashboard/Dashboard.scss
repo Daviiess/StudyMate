@@ -150,16 +150,22 @@
 
         .dashboard-dot{
             width: 10px;
-            background-color: $color-Primary;
             position: absolute;
             height: 10px;
             border-radius: 50%;
             display: inline-block;
             cursor: pointer;
             top: .4rem;
-            box-shadow: 0 0 .1rem 0.1rem rgba($color-Accent, 0.4);
             
         }   
+        .dashboard-dot--quiz{
+            background-color: rgba($color-Primary, .95);
+             box-shadow: 0 0 .1rem 0.01rem rgba($color-Primary, 0.4);
+        }
+        .dashboard-dot--document{
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            box-shadow: 0 1.28rem 3.2rem -0.8rem rgba(14, 165, 233, 0.45);
+        }
         &--text{
             display: block;
             font-size: 1.35rem;
@@ -172,7 +178,7 @@
            padding: 0 1.5rem;
            letter-spacing: .5px;
            font-weight: 400;
-
+            
         }
     }
     &__view-btn{
@@ -181,8 +187,20 @@
         font-weight: 600;
         cursor: pointer;
         box-shadow: 0 0.64rem 1.6rem -0.64rem rgba($color-Accent, 0.15);  
-        
+        transition: all .5s;
+        padding: .5rem;
+        border-radius: .5rem;
+        &:hover{
+            background-color: rgba($color-Primary, .15);
+        }
+       
     }
+     &__view-btn--document{
+            color:   #0ea5e9; 
+            &:hover{
+            background-color: rgba(#0ea5e9, .15);
+        }
+        }
 }
 
 
