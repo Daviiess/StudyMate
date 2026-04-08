@@ -103,7 +103,7 @@
   border-radius: 2rem;
   padding: 3.2rem;
   box-shadow: 0 2.5rem 5rem -1.2rem rgba(0, 0, 0, 0.25);
-  animation: modalScaleUp 0.3s ease-out;
+  animation: modalScaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   &__header{
@@ -149,9 +149,8 @@
         box-shadow: 0 0 0 4px rgba($color-Primary, 0.1);
     }
   }
+  
   &__upload-zone{
-    
-  // ... your existing styles ...
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px dashed $color-grey-light;
 
@@ -164,11 +163,10 @@
       color: $color-Primary;
       
       filter: drop-shadow(0 0 8px rgba($color-Primary, 0.6));
-      transform: translateY(-2px); // Slight lift effect
+      transform: translateY(-2px); 
       transition: all 0.3s ease;
     }
 
-    // 2. Make the Text Glow
     .upload-modal__file-status {
       color: $color-Primary;
       font-weight: 700;
@@ -197,7 +195,7 @@
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; // Adds the "..."
+    text-overflow: ellipsis; 
     display: block;
 }
    &__actions{
@@ -205,8 +203,6 @@
     display: flex;
     justify-content: space-between;
     margin-top: 3rem;
-
-    
 
 
     @media (max-width: 480px) {
@@ -240,6 +236,12 @@
 
 
 @keyframes modalScaleUp {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateZ(0); 
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
 }

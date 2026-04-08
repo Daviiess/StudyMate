@@ -4,8 +4,10 @@ import toast from 'react-hot-toast';
 import documentService from '../../../services/documentService.js';
 import Spinner from '../../../components/common/Spinner/Spinner.jsx';
 import Button from '../../../components/common/Button/Button.jsx';
-import './DocumentListPage.scss'
+import './DocumentListPage.scss';
 import DocumentCard from '../../../components/documents/DocumentCard.jsx';
+import Modal from '../../../components/common/Modal/Modal.jsx';
+import Portal from '../../../components/common/Portal/Portal.jsx';
 const DocumentListPage = () => {
   const [documents, setDocuments] = useState([]);
   const [loading , setLoading] = useState(true);
@@ -21,13 +23,17 @@ const DocumentListPage = () => {
    const [deleting, setDeleting] = useState(false);
    const [selectedDoc, setSelectedDoc] = useState(null);
 
+   
    const fetchDocuments = async () => {
     try{
-      const data = await documentService.getDocuments();
-      setDocuments(data.count);
+      const response = await documentService.getDocuments();
+      const docArray = response.data || [];
+     
+      setDocuments(docArray);
      
     }catch(error){
       console.error('error: ', error);
+      setDocuments([]);
       toast.error('Failed to fetch documents.');
     }finally{
       setLoading(false);
@@ -37,8 +43,7 @@ const DocumentListPage = () => {
     fetchDocuments();
    },[]) 
 
- console.log('documents: ',documents);
- console.log('documents length: ',documents?.count?.length);
+ 
 
    //handle file change
    const handleFileChange = (e) => {
@@ -47,6 +52,8 @@ const DocumentListPage = () => {
       setUploadFile(file);
       setUploadTitle(file.name.replace(/\.[^/.]+$/, ""))
     }
+    console.log(uploadFile)
+    console.log(uploadTitle)
    }
 
    const handleUpload = async (e) => {
@@ -57,17 +64,19 @@ const DocumentListPage = () => {
     }
     setUploading(true);
     const formData = new FormData();
-    formData.append("file", uploadFile);
+    formData.append("File", uploadFile);
     formData.append("title", uploadTitle);
 
     try{
       await documentService.uploadDocument(formData);
+      await fetchDocuments(); 
       toast.success("Document uploaded successfully");
       setIsUpModalOpen(false);
       setUploadFile(null);
       setUploadTitle("");
-      setLoading(true);
-      fetchDocuments();
+      console.log('documents', documents);
+
+          
 
     }catch(error){
       toast.error(error.message || "Upload failed")
@@ -76,9 +85,13 @@ const DocumentListPage = () => {
     }
    };
 
-   const handleDeleteRequest = (doc) => {
-    setSelectedDoc(doc);
-    setIsDeleteModalOpen(true);
+   const deleteModal = () => {
+    setIsDeleteModalOpen(deleteModal => !deleteModal)
+   }
+
+   const handleDeleteRequest = (document) => {
+    setSelectedDoc(document);
+    deleteModal();
    }
 
    const handleConfirmDelete = async () => {
@@ -111,7 +124,7 @@ const DocumentListPage = () => {
           <p>Get started by uploading your first PDF document
             to begin learning.
           </p>
-          <Button onClick={() => setIsDeleteModalOpen(true) }> <Plus/> Upload Document  </Button>
+          <Button onClick={() => setIsUpModalOpen(modal => !modal) }> <Plus/> Upload Document  </Button>
         </div>
       )
 
@@ -138,15 +151,16 @@ const DocumentListPage = () => {
         <h2>My Documents</h2>
         <p>Manage your learning materials</p>
       </div>
-     <Button> <Plus size={18}/> Upload Document</Button>
+     <Button onClick={() => setIsUpModalOpen(modal => !modal)}> <Plus size={18}/> Upload Document</Button>
       </div>
     <div className=''>
       {renderContent()}
     </div>
-     <div className="upload-modal" onClick={() => setIsUpModalOpen(false)}>
+    {/* Upload modal */}
+    { isUpModalOpen && <div className="upload-modal" onClick={() => setIsUpModalOpen(modal => !modal)}>
    <div className="upload-modal__overlay" onClick={(e) => e.stopPropagation()}>
     
-    {/* --- Header Section --- */}
+    {/* Header Section */}
     <div className="upload-modal__header">
       <h3 className="upload-modal__title">Upload Document</h3>
       <button 
@@ -158,7 +172,7 @@ const DocumentListPage = () => {
       </button>
     </div>
 
-    {/* --- Form Section --- */}
+    {/*  Form Section  */}
     <form onSubmit={handleUpload} className="upload-modal__form">
       
       {/* Title Input Group */}
@@ -187,7 +201,6 @@ const DocumentListPage = () => {
     hidden
   />
   <label htmlFor="file-upload" className="upload-modal__drop-zone">
-    {/* The icon and text will inherit the glow from the parent modifier */}
     <Upload size={24} className="upload-modal__upload-icon" />
     <span className="upload-modal__file-status">
       {uploadFile ? uploadFile.name : "Click to select a PDF"}
@@ -198,14 +211,6 @@ const DocumentListPage = () => {
 
       {/* Action Buttons */}
       <div className="upload-modal__actions">
-        {/* <Button 
-          type="button" 
-          className="upload-modal__btn upload-modal__btn--cancel"
-          variant="secondary" 
-          onClick={() => setIsUpModalOpen(false)}
-        >
-          Cancel
-        </Button> */}
         <button className='upload-modal__btn--cancel'
         type='button'
         onClick={() => setIsUpModalOpen(false)}
@@ -223,7 +228,15 @@ const DocumentListPage = () => {
       
     </form>
   </div>
-</div>
+</div>}
+
+   { isDeleteModalOpen && (
+      <Portal>
+         <Modal data = {selectedDoc}
+     deleteModal = {deleteModal}
+     deleteDocument = {handleConfirmDelete}/>
+      </Portal>
+)}
     </div>
   )
 }

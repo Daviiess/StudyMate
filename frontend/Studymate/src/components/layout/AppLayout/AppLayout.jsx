@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Sidebar from '../Sidebar/Sidebar.jsx';
 import Header from '../Header/Header.jsx';
 import './AppLayout.scss'
+import Modal from '../../common/Modal/Modal.jsx';
 const AppLayout = ({children}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

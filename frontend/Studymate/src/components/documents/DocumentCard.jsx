@@ -34,7 +34,7 @@ const formatFileSize = (bytes) => {
         "__v": 0
     },
     "message": "Document uploaded successfully. Processing in progress..." */
-const DocumentCard = ({document, onDelete}) => {
+const DocumentCard = ({document, onDelete, deleteModal}) => {
     const navigate = useNavigate();
 
     const handleNavigate = () => {
@@ -87,7 +87,7 @@ const truncateTitle = (title, maxLength = 25) => {
       </div>
       </div>
       <button className='document-card__delete' onClick={handleDelete}>
-        <Trash2 size={20}/>
+        <Trash2 size={20} onClick={deleteModal}/>
       </button>
 
     </div>

@@ -120,7 +120,8 @@ try{
         ]);
         res.status(200).json({
             success: true,
-            count: documents,
+            count: documents.length,
+            data: documents,
             statusCode: 200
         });
         }catch(error){
