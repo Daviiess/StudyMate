@@ -190,13 +190,25 @@
         transition: all .5s;
         padding: .5rem;
         border-radius: .5rem;
+
+
         &:hover{
             background-color: rgba($color-Primary, .15);
         }
+        
        
+    }
+    &__view-btn-link--document{
+        text-decoration: none;
+        color:   #0ea5e9; 
+    }
+    &__view-btn-link--quiz{
+        text-decoration: none;
+        color: $color-Primary; 
     }
      &__view-btn--document{
             color:   #0ea5e9; 
+            text-decoration: none;
             &:hover{
             background-color: rgba(#0ea5e9, .15);
         }

@@ -109,6 +109,7 @@ const DocumentListPage = () => {
       setDeleting(false);
     }
    };
+   console.log('documents: ' , documents)
    const renderContent = () => {
     if(loading){
       return <Spinner/>

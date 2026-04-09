@@ -61,7 +61,7 @@ try{
         try{
             const {text} = await extractTextFromPDF(filePath);
             
-            const chunks = chunkText(text , 500 , 500);
+            const chunks = chunkText(text , 500 , 50);
 
             //update document
             await Document.findByIdAndUpdate(documentId, {
@@ -174,7 +174,11 @@ try{
             _id: req.params.id,
             userId: req.user._id
         });
-
+        if (!document) {
+        return res.status(404).
+        json({ success: false,
+         error: "Document not found" });
+}
         const urlParts = document.filePath.split('/');
         const uniqueFilename = urlParts[urlParts.length - 1];
         

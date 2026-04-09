@@ -1,4 +1,14 @@
 /**
+ * Common stop words to exclude from keyword matching
+ * Defined outside to avoid re-creating the Set on every function call
+ */
+const STOP_WORDS = new Set([
+  'the', 'is', 'at', 'which', 'on', 'a', 'an', 'and', 'or', 'but',
+  'in', 'with', 'to', 'for', 'of', 'as', 'by', 'this', 'that', 'it',
+  'from', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had'
+]);
+
+/**
  * Split text into chunks for better AI processing
  * @param {string} text - Full text to chunk
  * @param {number} chunkSize - Target size per chunk (in words)
@@ -6,11 +16,15 @@
  * @returns {Array<{content: string, chunkIndex: number, pageNumber: number}>}
  */
 export const chunkText = (text, chunkSize = 500, overlap = 50) => {
+  // 1. Critical Safety Guard: Prevent infinite loops if overlap >= chunkSize
+  const effectiveOverlap = Math.min(overlap, chunkSize - 1);
+  const stepSize = Math.max(1, chunkSize - effectiveOverlap);
+
   if (!text || text.trim().length === 0) {
     return [];
   }
 
-  // Clean text while preserving paragraph structure
+  // 2. Clean text
   const cleanedText = text
     .replace(/\r\n/g, '\n')
     .replace(/\s+/g, ' ')
@@ -18,7 +32,7 @@ export const chunkText = (text, chunkSize = 500, overlap = 50) => {
     .replace(/ \n/g, '\n')
     .trim();
 
-  // Try to split by paragraphs (single or double newlines)
+  // Split by paragraphs
   const paragraphs = cleanedText.split(/\n+/).filter(p => p.trim().length > 0);
 
   const chunks = [];
@@ -30,8 +44,9 @@ export const chunkText = (text, chunkSize = 500, overlap = 50) => {
     const paragraphWords = paragraph.trim().split(/\s+/);
     const paragraphWordCount = paragraphWords.length;
 
-    // If single paragraph exceeds chunk size, split it by words
+    // Handle single paragraphs larger than the chunkSize
     if (paragraphWordCount > chunkSize) {
+      // Flush current chunk before processing giant paragraph
       if (currentChunk.length > 0) {
         chunks.push({
           content: currentChunk.join('\n\n'),
@@ -42,8 +57,8 @@ export const chunkText = (text, chunkSize = 500, overlap = 50) => {
         currentWordCount = 0;
       }
 
-      // Split large paragraph into word-based chunks
-      for (let i = 0; i < paragraphWords.length; i += (chunkSize - overlap)) {
+      // Split large paragraph into word-based chunks using the safe stepSize
+      for (let i = 0; i < paragraphWords.length; i += stepSize) {
         const chunkWords = paragraphWords.slice(i, i + chunkSize);
         chunks.push({
           content: chunkWords.join(' '),
@@ -56,7 +71,7 @@ export const chunkText = (text, chunkSize = 500, overlap = 50) => {
       continue;
     }
 
-    // If adding this paragraph exceeds chunk size, save current chunk
+    // If adding this paragraph exceeds chunkSize, save current chunk and create overlap
     if (currentWordCount + paragraphWordCount > chunkSize && currentChunk.length > 0) {
       chunks.push({
         content: currentChunk.join('\n\n'),
@@ -64,42 +79,25 @@ export const chunkText = (text, chunkSize = 500, overlap = 50) => {
         pageNumber: 0
       });
 
-      // Create overlap from previous chunk
-      const prevChunkText = currentChunk.join(' ');
-      const prevWords = prevChunkText.split(/\s+/);
-      const overlapText = prevWords.slice(-Math.min(overlap, prevWords.length)).join(' ');
-
-      currentChunk = [overlapText, paragraph.trim()];
-      currentWordCount = overlapText.split(/\s+/).length + paragraphWordCount;
+      // Create overlap from previous words
+      const prevWords = currentChunk.join(' ').split(/\s+/);
+      const overlapWords = prevWords.slice(-Math.min(effectiveOverlap, prevWords.length));
+      
+      currentChunk = [...overlapWords, paragraph.trim()];
+      currentWordCount = overlapWords.length + paragraphWordCount;
     } else {
-      // Add paragraph to current chunk
       currentChunk.push(paragraph.trim());
       currentWordCount += paragraphWordCount;
     }
   }
 
-  // Add the last chunk
+  // Add the final remaining chunk
   if (currentChunk.length > 0) {
     chunks.push({
       content: currentChunk.join('\n\n'),
       chunkIndex: chunkIndex,
       pageNumber: 0
     });
-  }
-
-  // Fallback: if no chunks created, split by words
-  if (chunks.length === 0 && cleanedText.length > 0) {
-    const allWords = cleanedText.split(/\s+/);
-    for (let i = 0; i < allWords.length; i += (chunkSize - overlap)) {
-      const chunkWords = allWords.slice(i, i + chunkSize);
-      chunks.push({
-        content: chunkWords.join(' '),
-        chunkIndex: chunkIndex++,
-        pageNumber: 0
-      });
-
-      if (i + chunkSize >= allWords.length) break;
-    }
   }
 
   return chunks;
@@ -117,20 +115,14 @@ export const findRelevantChunks = (chunks, query, maxChunks = 3) => {
     return [];
   }
 
-  // Common stop words to exclude
-  const stopWords = new Set([
-    'the', 'is', 'at', 'which', 'on', 'a', 'an', 'and', 'or', 'but',
-    'in', 'with', 'to', 'for', 'of', 'as', 'by', 'this', 'that', 'it'
-  ]);
-
-  // Extract and clean query words
+  // Extract and clean query words once
   const queryWords = query
     .toLowerCase()
     .split(/\s+/)
-    .filter(w => w.length > 2 && !stopWords.has(w));
+    .filter(w => w.length > 2 && !STOP_WORDS.has(w));
 
+  // If no useful query words, return first few chunks
   if (queryWords.length === 0) {
-    // Return clean chunk objects without Mongoose metadata
     return chunks.slice(0, maxChunks).map(chunk => ({
       content: chunk.content,
       chunkIndex: chunk.chunkIndex,
@@ -139,59 +131,50 @@ export const findRelevantChunks = (chunks, query, maxChunks = 3) => {
     }));
   }
 
+  // Pre-compile Regexes for each query word to save CPU cycles
+  const wordRegexes = queryWords.map(word => ({
+    word,
+    exact: new RegExp(`\\b${word}\\b`, 'gi'),
+    partial: new RegExp(word, 'gi')
+  }));
+
   const scoredChunks = chunks.map((chunk, index) => {
     const content = chunk.content.toLowerCase();
-    const contentWords = content.split(/\s+/).length;
+    const wordCount = chunk.content.split(/\s+/).length || 1;
     let score = 0;
+    let uniqueWordsFound = 0;
 
-    // Score each query word
-    for (const word of queryWords) {
-      // Exact word match (higher score)
-      const exactMatches = (content.match(new RegExp(`\\b${word}\\b`, 'g')) || []).length;
+    for (const { exact, partial, word } of wordRegexes) {
+      const exactMatches = (content.match(exact) || []).length;
+      const partialMatches = (content.match(partial) || []).length;
+      
+      if (partialMatches > 0) uniqueWordsFound++;
+
       score += exactMatches * 3;
-
-      // Partial match (lower score)
-      const partialMatches = (content.match(new RegExp(word, 'g')) || []).length;
       score += Math.max(0, partialMatches - exactMatches) * 1.5;
     }
-
-    // Bonus: Multiple query words found
-    const uniqueWordsFound = queryWords.filter(word => 
-      content.includes(word)
-    ).length;
 
     if (uniqueWordsFound > 1) {
       score += uniqueWordsFound * 2;
     }
 
-    // Normalize by content length
-    const normalizedScore = score / Math.sqrt(contentWords);
-
-    // Small bonus for earlier chunks
+    // Normalize score by square root of length to avoid penalizing long chunks too much
+    // Avoid division by zero with Math.sqrt(wordCount)
+    const normalizedScore = score / Math.sqrt(wordCount);
     const positionBonus = 1 - (index / chunks.length) * 0.1;
 
-    // Return clean object without Mongoose metadata
     return {
       content: chunk.content,
       chunkIndex: chunk.chunkIndex,
       pageNumber: chunk.pageNumber,
       _id: chunk._id,
       score: normalizedScore * positionBonus,
-      rawScore: score,
       matchedWords: uniqueWordsFound
     };
   });
 
   return scoredChunks
     .filter(chunk => chunk.score > 0)
-    .sort((a, b) => {
-      if (b.score !== a.score) {
-        return b.score - a.score;
-      }
-      if (b.matchedWords !== a.matchedWords) {
-        return b.matchedWords - a.matchedWords;
-      }
-      return a.chunkIndex - b.chunkIndex;
-    })
+    .sort((a, b) => b.score - a.score || a.chunkIndex - b.chunkIndex)
     .slice(0, maxChunks);
 };

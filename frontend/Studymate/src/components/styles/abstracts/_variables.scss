@@ -4,7 +4,7 @@ $color_white: #F3F0FF;
 $primary-text:#4A4E57;
 $primary-subtle:rgba(0, 0, 0, 0.5);
 $border-color: #e5e7eb;
-$color-Primary-Dark: darken($color-Primary, 5%);
+$color-Primary-Dark: rgba($color-Primary, .9);
 $color-grey-dark: #1f2937;    // Headings
 $color-grey-medium: #6b7280;  // Body/Subtext
 $color-grey-light: #e5e7eb;   // Borders

@@ -1,0 +1,33 @@
+@use '../../styles/abstracts/variables' as *;
+.tab{
+    padding: 3rem 3rem;
+    &__nav{
+        display: flex;
+        gap: 2rem;
+      
+    }
+    &__button{
+        border: none;
+        background-color: transparent;
+        color: rgba($color-grey-medium, .9);
+        cursor: pointer;
+        font-size: 1.5rem;
+        font-weight: 550;
+        padding: 1rem 2rem 2rem;
+        transition: border-color 0.4s ease-in-out, color 0.4s ease-in-out;
+        border-bottom: 2px solid transparent;
+
+    }
+    .active{
+        color: $color-Accent;
+        border-bottom: 2px solid;
+    }
+
+    /* 
+    'Content', label: 'Content', content: renderContent()},
+    {name: 'Chat' , label: 'Chat' , content: renderChat()},
+    {name: 'AI actions', label: 'AI Actions', content: renderChat()},
+    {name: 'Flashcards', label: 'Flashcards', content: renderFlashcardsTab()},
+    {name:'Quizzes'   
+    */
+}

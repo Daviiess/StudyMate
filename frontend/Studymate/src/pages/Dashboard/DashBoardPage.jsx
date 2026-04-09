@@ -5,12 +5,13 @@ import toast from 'react-hot-toast';
 import { FileText, BrainCircuit, TrendingUp, Clock, BookOpen, CalendarDays } from 'lucide-react';
 import './Dashboard.scss';
 import EmptyDashboard from '../../components/common/EmptyDashboard/EmptyDashboard.jsx';
+import { Link, NavLink, useNavigate,  } from 'react-router';
 
 
 const DashBoardPage = () => {
   const [dashboardData , setDashboardData] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
  
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -215,6 +216,7 @@ const activities = [
         </div>
         <ul className="dashboard__container">
           {activities.map((activity) => {
+    
             return (
               <li key={`${activity.type}-${activity.id}`} className='dashboard__documents'>
                 <div className='dashboard__activity-info'>
@@ -230,7 +232,10 @@ const activities = [
                   </div>
                   <div>
                   <span className={`dashboard__view-btn dashboard__view-btn--${activity.type}`}>
-                  view 
+                    <Link to={activity.link} className={`dashboard__view-btn-link--${activity.type}`}>
+                       view 
+                    </Link>
+      
                 </span>
                 </div>
                 </div>
