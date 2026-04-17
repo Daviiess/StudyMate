@@ -131,7 +131,9 @@ const RegisterPage = () => {
               </div>
             )}
 
-            <button type="submit" className='register__btn' disabled={loading}>
+            <button type="submit" className='register__btn' 
+            disabled={loading || !email || !password}
+            >
               <span className='register__btn--span'>
                 {loading ? (
                   <>

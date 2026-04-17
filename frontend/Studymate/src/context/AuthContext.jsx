@@ -19,6 +19,8 @@ export const AuthProvider = ({children}) => {
         checkAuthStatus();
     },[])
 
+    
+
     const checkAuthStatus = () => {
      try { 
          

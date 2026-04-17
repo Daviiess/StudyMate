@@ -30,7 +30,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT' , 'DELETE'],
     credentials: true // to allow authorization headers
 }))
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 

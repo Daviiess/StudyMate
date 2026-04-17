@@ -131,7 +131,10 @@
             box-shadow: 0 0.32rem 0.64rem rgba(0, 17, 15, 0.2); 
             filter: brightness(0.9); 
         }
-
+        &:disabled{
+            background-color: rgba($color-Accent, 0.3);
+            cursor: not-allowed;
+        }
         &--span {
             display: flex;
             justify-content: center;

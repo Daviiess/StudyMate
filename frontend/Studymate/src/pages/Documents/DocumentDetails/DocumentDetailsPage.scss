@@ -1,6 +1,6 @@
 @use '../../../components/styles/abstracts/variables' as *;
 .doc-details{
-
+position: relative;
     &__link-holder{
         padding: 4rem 3rem 1rem 3rem;
     }
@@ -15,4 +15,43 @@
         gap: .5rem;
         text-transform: capitalize;
     }
+    .no-pdf{
+        text-align: center;
+        font-size: 1.7rem;
+        font-weight: 500;
+    }
+}
+//ai
+.ai-document-grid{
+    display: flex;
+    gap: 2rem; 
+    width: 100%;
+    height: calc(100vh - 22rem); 
+    overflow: hidden;
+}
+.summary-btn{
+    position: absolute;
+    left: 3rem;
+    bottom: .1rem;
+    padding: 1.5rem 2.5rem;
+    border: none;
+    border-radius: 0 .5rem 0 .5rem;
+    background-color: rgba($color-Accent, .8);
+    color: #fff;
+    z-index: 10;
+    
+}
+.hide{
+    display: none;
+}
+.concept-btn{
+    position: absolute;
+    right: 3rem;
+    top: 10rem;
+    padding: 1.5rem 2.5rem;
+    border: none;
+    border-radius: 1rem;
+    background-color: rgba($color-Accent, .8);
+    color: #fff;
+
 }

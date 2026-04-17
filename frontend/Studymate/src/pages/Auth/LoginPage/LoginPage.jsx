@@ -91,7 +91,9 @@ const LoginPage = () => {
                 <p className='login__error--text'>{error}</p>
               </div>
             ) }
-            <button className='login__btn' onClick={handleSubmit}>
+            <button className='login__btn' onClick={handleSubmit}
+            disabled = {!email.trim() || !password.trim()}
+            >
               <span className='login__btn--span'>
                 {loading ? (
                   <>
