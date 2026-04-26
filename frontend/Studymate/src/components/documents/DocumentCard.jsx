@@ -2,7 +2,10 @@ import React from 'react'
 import './DocumentCard.scss';
 import { FileText, Trash2, BookOpen, BrainCircuit, Clock} from 'lucide-react';
 import { useNavigate } from 'react-router';
-
+export const truncateTitle = (title, maxLength = 20) => {
+  if (title?.length <= maxLength) return title;
+  return title?.substring(0, maxLength) + "...";
+};
 const formatFileSize = (bytes) => {
     if(bytes === undefined || bytes === null) return 'N/A';
     const units = ['B' , 'KB' , 'MB' , 'GB', 'TB'];
@@ -15,25 +18,7 @@ const formatFileSize = (bytes) => {
     }
     return `${size.toFixed(1)} ${units[unitIndex]}`;
 }
-/* {
-    "success": true,
-    "data": {
-        "userId": "69ca77df3e69b6d0fb279a30",
-        "title": "My document 3",
-        "fileName": "COSC101 EXAM 17_18.pdf",
-        "filePath": "/uploads/documents/1775478597814-142745531-COSC101 EXAM 17_18.pdf",
-        "extractedText": "",
-        "summary": "",
-        "status": "processing",
-        "fileSize": 1498318,
-        "_id": "69d3a74538c43a0e38cdebfa",
-        "chunks": [],
-        "uploadDate": "2026-04-06T12:29:57.825Z",
-        "createdAt": "2026-04-06T12:29:57.826Z",
-        "updatedAt": "2026-04-06T12:29:57.826Z",
-        "__v": 0
-    },
-    "message": "Document uploaded successfully. Processing in progress..." */
+
 const DocumentCard = ({document, onDelete, deleteModal}) => {
     const navigate = useNavigate();
 
@@ -60,10 +45,7 @@ const DocumentCard = ({document, onDelete, deleteModal}) => {
   if (diffInDays === 1) return 'yesterday';
   return `${diffInDays} days ago`;
 };
-const truncateTitle = (title, maxLength = 25) => {
-  if (title.length <= maxLength) return title;
-  return title.substring(0, maxLength) + "...";
-};
+
   return (
     <div className='document-card'>
         <div onClick={handleNavigate} className='document-card__flex'>

@@ -19,13 +19,11 @@
 
     &__card-holder{
         display: grid;
-        grid-template-columns: repeat(4, 1fr); /* 5 equal columns that adjust to screen size */
+        grid-template-columns: repeat(4, 1fr); 
         width: 100%;
         gap: 16px; 
     
-        /* overflow-y: scroll;
-        height: 50rem; */
-
+  
 
     }
     .box{

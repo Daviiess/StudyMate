@@ -1,6 +1,6 @@
 import React from 'react'
 import './Tab.scss';
-const Tab = ({activeTab, setActiveTab, tabs }) => {
+const Tab = ({activeTab, /* setActiveTab, */ tabs, handleTabChange }) => {
   return (
     <div className='tab'>
 
@@ -9,7 +9,7 @@ const Tab = ({activeTab, setActiveTab, tabs }) => {
                 return(
                     <button key={tab.label} 
                     className = {`tab__button ${activeTab === tab.name ? 'active' : ''}`} 
-                    onClick = {() => setActiveTab(tab.name)}
+                    onClick = {() => handleTabChange(tab.name)}
                     >
                         {tab.label}
                     </button>

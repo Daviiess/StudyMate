@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams,Link, NavLink } from 'react-router'
 import documentService from '../../../services/documentService';
 import toast from 'react-hot-toast';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, PanelLeftClose, PanelRight, PanelRightOpen } from 'lucide-react';
 import Spinner from '../../../components/common/Spinner/Spinner';
 import './DocumentDetailsPage.scss';
 import PageHeader from '../../../components/common/PageHeader/PageHeader';
@@ -12,14 +12,23 @@ import DocumentViewer from '../../../components/DocumentViewer/DocumentViewer';
 import ChatUi from '../../../components/ChatInterface/ChatUi';
 import Ai_Actions from '../../../components/Ai-Actions/Ai_Actions';
 import AiConcepts from '../../../components/AiConcepts/AiConcepts';
-
+import SummaryAction from '../../../components/Summarize-action/SummaryAction';
+import DeckOverviewPage from '../../FlashCards/DeckOverviewPage/DeckOverviewPage';
+import { useSearchParams } from 'react-router';
 const DocumentDetailsPage = () => {
   const {id} = useParams();
   const [document , setDocument] = useState(null);
-  const [activeTab, setActiveTab] = useState('Document');
+  /* const [activeTab, setActiveTab] = useState('Document'); */
   const [loading , setLoading] = useState(true);
   const [aiConcept, setAiConcept] = useState(false)
+  const [isSummaryModalOpen, setIsSummaryModalOpen] = useState(false);
+  
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'Document';
+  const handleTabChange = (tabName) => {
+    setSearchParams({ tab: tabName });
+  };
 const fetchDocument = async() => {
   try{
     const response = await documentService.getDocumentById(id);
@@ -68,13 +77,15 @@ console.log(pdfUrl);
       
       <div className='ai-document-grid'>
         <DocumentViewer pdfUrl = {pdfUrl} aiConcept = {aiConcept}/>
-       
+       {isSummaryModalOpen && <SummaryAction toggleSummary = {toggleSummary}/>}
      { aiConcept ? <AiConcepts/> : null}
       </div>
       </>
     )
   }
-
+  const toggleSummary = () => {
+    setIsSummaryModalOpen(prev => !prev)
+  }
   //toggle concepts
   const toggleConceptTab = () => {
     setAiConcept(prev => !prev)
@@ -84,11 +95,9 @@ console.log(pdfUrl);
     return <ChatUi/>;
   }
 
-  const renderAIActions = () => {
-    return <Ai_Actions/>;
-  }
+
   const renderFlashcardsTab = () => {
-    return 'flashcards';
+    return <DeckOverviewPage/>;
   }
   const renderQuizTab = () => {
     return 'QuizzesTab'
@@ -97,7 +106,6 @@ console.log(pdfUrl);
   const tabs = [
     {name: 'Document', label: 'Document', content: renderContent()},
     {name: 'Chat' , label: 'Chat' , content: renderChat()},
-    {name: 'AI actions', label: 'AI Actions', content: renderAIActions()},
     {name: 'Flashcards', label: 'Flashcards', content: renderFlashcardsTab()},
     {name:'Quizzes' , label: 'Quizzes' , content: renderQuizTab()}
   ];
@@ -120,16 +128,25 @@ console.log(pdfUrl);
             <ArrowLeft size={20}/> Back to documents
           </Link>
       </div>
-      <button className= {`${activeTab !== 'Document' ? 'hide' : 'concept-btn'}`} onClick={toggleConceptTab}> 
-      Concept tab
+      <button className= {`${activeTab !== 'Document' ? 'hide' : 'concept-btn'}`} 
+      onClick={toggleConceptTab}
+      title={aiConcept ? "Close Concepts tab" : "Open Concepts tab"}
+      disabled = {loading}
+      > 
+      {/* Concept tab */}
+      {!aiConcept ? <PanelRightOpen/> : <PanelLeftClose/>}
       </button>
      
-        <button className= {`${activeTab !== 'Document' ? 'hide': 'summary-btn'}`} >
-          Summarize button
+        <button className= {`${activeTab !== 'Document' ? 'hide': 'summary-btn'}`}
+        onClick={toggleSummary}
+        disabled = {loading}
+        title='Summarize document'
+        >
+          Document Summary
           </button>
    
       <PageHeader title = {document.title}/>
-      <Tab activeTab = {activeTab} setActiveTab = {setActiveTab} tabs = {tabs}/>
+      <Tab activeTab = {activeTab} /* setActiveTab = {setActiveTab} */ tabs = {tabs} handleTabChange = {handleTabChange}/>
       
     </div>
   

@@ -6,15 +6,19 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.6); // Deep slate with opacity
-  backdrop-filter: blur(4px);
-  will-change: backdrop-filter; // Makes it look premium
+ background: radial-gradient(
+    circle at center, 
+    rgba(13, 19, 35, 0.4) 0%, 
+    rgba(13, 19, 35, 0.95) 100%
+  );
+  
+  will-change: backdrop-filter; 
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   padding: 2rem;
-
+ animation: fadeIn 0.2s ease;
   &__overlay{
  background: #ffffff;
   width: 100%;

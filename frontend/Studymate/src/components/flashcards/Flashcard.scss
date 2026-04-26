@@ -1,0 +1,108 @@
+@use '../styles/abstracts/variables' as *;
+
+.flashcard {
+    background: #fff;
+    border: $main-border;
+    border-radius: 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: all .5s;
+    max-height: 20rem;
+    box-shadow: 0 .6rem 2.4rem -0.4rem rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 1;
+    &:hover {
+        background-color: rgba($color-Accent, .1);
+    }
+    
+    
+    &:hover &__delete {
+        opacity: 1;
+    }
+
+    &__flex {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    &__icon-wrapper {
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(to right, rgba($color-Primary, .8) , rgba($color-Accent, .8));
+        padding: .8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: .5rem;
+        color: $color_white;
+        box-shadow: 0 1.6rem 4rem -1.6rem rgba(71, 85, 105, 0.15);
+    }
+
+    &__title {
+        font-size: 1.7rem;
+        font-weight: 600;
+        margin-bottom: .5rem;
+    }
+
+    &__footer {
+        border-top: $main-border;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        height: 5rem;
+        
+    }
+
+    &__set-holder{
+        border: 1px solid rgba($color-Accent, .8);
+        padding: .5rem 1.5rem;
+        background-color: rgba($color-Accent, .1);
+        border-radius: 1rem;
+    }
+
+
+    &__footer-items {
+        display: flex;
+        align-items: center;
+        margin-top: .5rem;
+        gap: .5rem;
+        color: $color-grey-medium;
+        font-weight: 500;
+    }
+
+    &__delete {
+        position: absolute;
+        right: 2rem;
+        top: 2.5rem;
+        opacity: 0;
+        color: rgba($color-Primary, .8);
+        background: #fff; 
+        box-shadow: 0 0 .5rem rgba(0, 0, 0, .4);
+        border-radius: .5rem;
+        padding: .5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .4s;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-5px);
+            color: #ef4444; 
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}

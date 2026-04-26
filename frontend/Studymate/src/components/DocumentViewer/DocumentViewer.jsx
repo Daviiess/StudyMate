@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+
 import { 
   ExternalLink, 
   ChevronLeft, 
@@ -99,7 +100,7 @@ const DocumentViewer = ({ pdfUrl, aiConcept }) => {
             <button 
               onClick={() => setScale(prev => Math.min(prev + 0.25, 2.0))} 
               className="doc-viewer__icon-btn"
-              disabled={scale >= 1.50} 
+              disabled={scale >= 2.0} 
             >
               <ZoomIn size={18} />
             </button>

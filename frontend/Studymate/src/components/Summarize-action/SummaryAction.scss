@@ -1,0 +1,87 @@
+@use '../styles/abstracts/variables'as *;
+.summary-action{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+ background: radial-gradient(
+    circle at center, 
+    rgba(13, 19, 35, 0.4) 0%, 
+    rgba(13, 19, 35, 0.95) 100%
+  );
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease;
+
+  &__overlay{
+  background: #ffffff;
+  width: 100%;
+  max-width: 50rem;
+  border-radius: 2rem;
+  padding: 3.2rem;
+  box-shadow: 0 2.5rem 5rem -1.2rem rgba(0, 0, 0, 0.25);
+  animation: modalScaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  }
+
+  &__title{
+    font-size: 2rem;
+    width: 90%;
+    overflow:hidden;
+
+  }
+&__divider{
+    height: 2px ;
+    width: 100%;
+    border:$main-border;
+}
+&__body{
+  max-height: 65rem;
+  overflow: auto;
+}
+&__cancel-btn{
+  position: absolute;
+  top: 2.7rem;
+  right: 3rem;
+  border: none;
+  background-color: transparent;
+  color: $color-grey-medium;
+  cursor: pointer;
+  transition: all .5s;
+
+  &:hover{
+  transform: translateY(-2px);
+
+ }
+ &:active{
+  transform: translateY(0);
+ }
+}
+ 
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes modalScaleUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

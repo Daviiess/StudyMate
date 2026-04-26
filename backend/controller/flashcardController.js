@@ -36,7 +36,35 @@ export const getAllFlashCardSets = async(req, res, next) => {
     }catch(error){
         next(error)
     }
- }
+ };
+ export const getFlashcardSetById = async (req, res, next) => {
+    try {
+        const { setId } = req.params;
+
+        // Find the exact set the user clicked on
+        const flashcardSet = await Flashcard.findOne({
+            _id: setId,
+            userId: req.user._id
+        });
+
+        if (!flashcardSet) {
+            return res.status(404).json({
+                success: false,
+                error: 'Flashcard set not found',
+                statusCode: 404
+            });
+        }
+
+        
+        res.status(200).json({
+            success: true,
+            data: flashcardSet
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
 
  export const reviewFlashcard = async(req , res , next) => {
     try{

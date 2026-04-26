@@ -25,7 +25,14 @@ const getFlashcardsForDocument = async (documentId) => {
     throw error.response?.data || { message: 'Failed to fetch flashcards' };
   }
 };
-
+const getFlashcardSetById = async (setId) => {
+try{
+  const response = await axiosInstance.get(API_PATHS.FLASHCARDS.GET_FLASHCARD_BY_ID(setId));
+  return response.data;
+}catch(error){
+    throw error.response?.data || { message: 'Failed to fetch flashcard set' };
+}
+}
 const reviewFlashcard = async (setId, cardId) => {
   try {
     const response = await axiosInstance.patch(API_PATHS.FLASHCARDS.REVIEW_FLASHCARD( setId, cardId));
@@ -58,6 +65,7 @@ const flashcardService = {
   getFlashcardsForDocument,
   reviewFlashcard,
   toggleStar,
+  getFlashcardSetById,
   deleteFlashcardSet,
 };
 

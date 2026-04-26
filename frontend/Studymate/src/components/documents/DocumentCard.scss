@@ -7,6 +7,7 @@
     position: relative;
     transition: all .5s;
     max-height: 25rem;
+    
     box-shadow: 0 .6rem 2.4rem -0.4rem rgba(0, 0, 0, 0.08);
     &:hover {
         background-color: rgba($color-Accent, .1);
@@ -34,7 +35,6 @@
         border-radius: .5rem;
         color: $color_white;
         box-shadow: 0 1.6rem 4rem -1.6rem rgba(71, 85, 105, 0.15);
-// A deep, soft shadow that looks very "premium"
 
     }
     &__title{
@@ -42,6 +42,8 @@
         font-weight: 600;
         margin-bottom: .5rem;
         text-transform: capitalize;
+
+        
     }
     &__size{
         font-size: 1.2rem;
@@ -113,6 +115,7 @@
         cursor: pointer;
         &:hover{
             transform: translateY(-5px);
+            color: red;
         }
         &:active{
             transform: translateY(0);

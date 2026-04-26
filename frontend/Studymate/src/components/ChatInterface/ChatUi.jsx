@@ -41,7 +41,7 @@ const ChatUi = () => {
  //handle sending chat message
  const handleSendMessage = async(e) => {
     e.preventDefault(); 
-    if(!message.trim) return;
+    if(!message.trim()) return;
    
     const userMessage = {
         role: 'user',
