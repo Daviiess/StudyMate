@@ -1,3 +1,4 @@
+@use '../../styles/abstracts/variables' as *;
 .spinner-loader-container {
     position: absolute;
     top: 50%;
@@ -16,9 +17,14 @@
   border: 4px solid #f3f4f6; 
   border-right-color: #9333ea; 
   border-radius: 50%;
+  margin-bottom: .5rem;
   animation: rotate-spinner 0.75s linear infinite;
 }
-
+.spinner-text{
+  font-size: 1.2rem;
+  color: $color-grey-medium;
+  font-weight: 500;
+}
 @keyframes rotate-spinner {
   from {
     transform: rotate(0deg);

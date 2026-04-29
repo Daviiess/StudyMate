@@ -44,7 +44,7 @@ const reviewFlashcard = async (setId, cardId) => {
 
 const toggleStar = async ( setId , cardId) => {
   try {
-    const response = await axiosInstance.patch(API_PATHS.FLASHCARDS.TOGGLE_STAR(cardId, setId));
+    const response = await axiosInstance.patch(API_PATHS.FLASHCARDS.TOGGLE_STAR(setId, cardId));
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: 'Failed to star flashcard' };

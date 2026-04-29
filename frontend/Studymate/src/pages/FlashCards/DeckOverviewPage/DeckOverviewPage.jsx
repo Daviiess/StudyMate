@@ -2,34 +2,68 @@ import React, { useEffect } from 'react'
 import { useParams} from 'react-router-dom';
 import { useStudy } from '../../../context/StudyContext';
 import './DeckOverviewPage.scss';
-import { BrainCircuit, Sparkles, X } from 'lucide-react';
+import { Sparkles, X } from 'lucide-react';
 import Button from '../../../components/common/Button/Button';
 import Flashcard from '../../../components/flashcards/Flashcard';
-import Spinner from '../../../components/common/Spinner/Spinner';
+import toast from 'react-hot-toast';
 import { useState } from 'react';
+import flashcardService from '../../../services/flashcardService';
 const DeckOverviewPage = () => {
   const {id: documentId} = useParams();
-  const {generateDeck , isLoading, deck, loadDeck} = useStudy()
+  const {generateDeck , isLoading} = useStudy()
   const [difficulty, setDifficulty] = useState('medium')
   const [count, setCount] = useState('10');
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [deck , setDeck] = useState([]); 
+  const [deckLoading, setDeckLoading] = useState(false);
   const options = {
   count,
   difficulty
 }
+  const fetchDeck = async() => {
+    setDeckLoading(true);
+    try{
+      const response = await flashcardService.getFlashcardsForDocument(documentId);
+      setDeck(response.data);
+    }catch(error){
+      console.error('failed to load deck: ', error);
+      toast.error('Failed to load flashcard set');
+    }finally{
+      setDeckLoading(false)
+    }
+
+  }
+  useEffect(() => {
+    if(documentId) fetchDeck();
+  }, [documentId]);
+
+  const handleDelete = async (id) => {
+    const previous = deck;
+    setDeck(prev => prev.filter(set => set._id !== id)); // ✅ instant UI update
+    try {
+        await flashcardService.deleteFlashcardSet(id);
+        toast.success('Flashcard set successfully deleted');
+    } catch (error) {
+        setDeck(previous); 
+        toast.error('Failed to delete flashcard set');
+    }
+};
+
+  
   const handleCardGeneration = async() => {
+   setDeckLoading(true)
+    try{
     setIsGenerating(false);
-    
     await generateDeck(documentId, options);
-    loadDeck(documentId);
+    await fetchDeck();
+    }catch(error){
+      toast.error('Failed to create deck')
+    }finally{
+      setDeckLoading(false)
+    }
   }
 
-  useEffect(() => {
-    if(documentId){
-      loadDeck(documentId);
-    }
-  }, [documentId])
-  console.log('deck: ', deck );
+
   
   const EmptyDeckIllustration = () => (
   <svg 
@@ -57,6 +91,7 @@ const DeckOverviewPage = () => {
   function EmptyFlashcard(){
     if(deck.length === 0){
       return(
+        <>
         <div className='empty-flashcard'>
             <div className='empty-flashcard__icon-holder'>
               <EmptyDeckIllustration/>
@@ -65,20 +100,13 @@ const DeckOverviewPage = () => {
             <p>Generate flashcards from your document to start learning and reinforce your knowledge</p>
            <div className='flashcard__option-holder'>
             
-             <Button disabled = {isLoading} onClick={handleCardGeneration}>
-              {isLoading ? 
-              <>
-              <div className='loading-spinner'/>
-              Generating...
-              
-              </>
-              : <>
-              <Sparkles fill='gold' size={20}/>Generate Flashcards
-              </>
-              }
+             <Button disabled = {deckLoading} onClick={() => setIsGenerating(true)}>
+                Generate flashcards
              </Button>
            </div>
         </div>
+        {isGenerating && <FlashcardOptionsModal />}
+        </>
       )
     }
   }
@@ -118,7 +146,7 @@ const DeckOverviewPage = () => {
           </div>
 
           <div className="options-modal__footer">
-            <Button onClick={handleCardGeneration} disabled={isLoading}>
+            <Button onClick={handleCardGeneration} disabled={deckLoading}>
               Confirm & Generate
             </Button>
           </div>
@@ -129,11 +157,11 @@ const DeckOverviewPage = () => {
 
   return (
     <div className='deck-overview'>
-      {deck.length <= 0 ? <EmptyFlashcard/>: (
+      
         <>
         <div className='deck-overview__header'>
         <div className='deck-overview__header--text'>
-        2 flashcard sets available
+        {deck?.length} flashcard set{deck?.length === 1 ? '' : 's'} available
       </div>
       <div className='flashcard__option-holder'>
        
@@ -145,15 +173,19 @@ const DeckOverviewPage = () => {
       </div>
      </div>
       <div className='deck-overview__grid-holder'>
-         {isLoading && 
+         {deckLoading ? (
          <div className='deck-overview__loading'>
             <div className="spinner-loader-circle"></div>
-            Flashcard List Loading...
-        </div>
-        }
-    {Array.isArray(deck) ? (
+            <p className='spinner-text'>Flashcard List Loading...</p>
+        </div>) : deck.length === 0 ? 
+        <div className='empty-flashcard-container'>
+        <EmptyFlashcard/>
+          </div>
+         : <>
+            {Array.isArray(deck) ? (
           deck?.map((card, index) => (
             <Flashcard 
+             onDelete = {handleDelete} 
               card={card} 
               key={card._id} 
               index={index} 
@@ -161,11 +193,14 @@ const DeckOverviewPage = () => {
             />
           ))
         ) : null} 
+         </> 
+        }
+ 
         
       </div>
        {isGenerating && <FlashcardOptionsModal />}
         </>
-      )}
+      
      
     
      

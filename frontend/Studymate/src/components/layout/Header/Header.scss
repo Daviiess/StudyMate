@@ -1,26 +1,5 @@
 @use '../../../components/styles/abstracts/variables' as *;
-
-/* 
-
-  <div className='header'>
-        <div className='header__bell'>
-            <Bell className='bell-icon'/>
-            <span className='notification-dot'></span>
-        </div>
-        {/* User Profile }
-        <div className='header__profile'>
-            <div className='header__profile--icon'>
-                <User size={20} className='user-icon' strokeWidth={2}/>
-                
-            </div>
-            <div className='header__profile--name'>
-                <p>Alex</p>
-                <p>alex@gmail.com</p>
-            </div>
-        </div>
-    </div>
-*/
-
+  
 .header{
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 
               0 1px 2px 0 rgba(0, 0, 0, 0.03);

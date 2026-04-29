@@ -6,7 +6,7 @@ const Spinner = () => {
   return (
     <div className="spinner-loader-container">
       <div className="spinner-loader-circle"></div>
-      <p className='u-color-grey'>Loading</p>
+      <p className='spinner-text'>Loading...</p>
     </div>
   );
 };

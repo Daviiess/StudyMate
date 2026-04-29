@@ -234,6 +234,7 @@ const DocumentListPage = () => {
    { isDeleteModalOpen && (
       <Portal>
          <Modal data = {selectedDoc}
+         deleting = {deleting}
      deleteModal = {deleteModal}
      deleteDocument = {handleConfirmDelete}/>
       </Portal>

@@ -1,46 +1,48 @@
 import React, { useContext } from 'react'
-import { useState, createContext, useReducer } from 'react';
+import { useState, createContext, useReducer, useCallback } from 'react';
 import aiService from '../services/aiService';
 import flashcardService from '../services/flashcardService';
 import toast from 'react-hot-toast';
+import { Trophy } from 'lucide-react';
 const initialState = {
-    deck: [],
+    deck: {},
+    allSets: [],
     currentIndex: 0,
     isFinished: false,
     isLoading: false,
-    isMastered: false,
-    isStarred: false,
-    lastReviewed: null,
-    reviewCount: 0
+   
 };
 
 
 export function studyReducer(state, action){
     switch(action.type){
         case 'LOADING':{
-            return {...state, deck: [] ,isLoading: true }
+            return {...state, deck: {} ,isLoading: true }
         }
         case 'LOAD_SUCCESS': {
             return { 
                     ...state, 
                     deck: action.payload,
-                    isLoading: false,
-                    currentIndex: 0
+                    isLoading: false, 
+                    currentIndex: 0,
+                    isFinished: false
             }
         }
         case 'NEXT_CARD': {
-            if(state.currentIndex >= state.deck.length - 1){
-                return {...state, isFinished: true}
-            }
-            return{...state, currentIndex: state.currentIndex + 1};
-        }
+           if (!state.deck?.cards) return state;
+           if(state.currentIndex >= state.deck.cards.length - 1){
+        return {...state, isFinished: true}
+    }
+    return{...state, currentIndex: state.currentIndex + 1};
+}
         case 'PREV_CARD':{
-            if(state.currentIndex < 0){
+            if(state.currentIndex <= 0){
                 return state
             }
             return {...state, currentIndex: state.currentIndex - 1}
         }
          case 'UPDATE_CARD_LOCAL':{
+            if (!state.deck?.cards) return state;
                 const updatedDeck = state.deck.cards.map(card => 
                     card._id === action.payload.cardId ? {...card, 
                         ...action.payload.updates }: card
@@ -52,6 +54,26 @@ export function studyReducer(state, action){
                         },
                   }
         } 
+        case 'TOGGLE_STAR_LOCAL': {
+            if (!state.deck?.cards) return state;
+            const updatedCards = state.deck.cards.map(card =>
+                card._id === action.payload.cardId
+                    ? { ...card, isStarred: !card.isStarred }
+                    : card
+            );
+            return {
+                ...state,
+                deck: { ...state.deck, cards: updatedCards },
+            };
+        }
+        case 'DELETE_SET': {
+            if(!state.allSets) return state;
+            console.log('statedeck',state.deck);
+            return{
+                ...state,
+                allSets: state.allSets.filter(set => set._id !== action.payload)
+            }
+        }
         default:
         return state;
     } 
@@ -80,51 +102,31 @@ export const StudyProvider = ({children}) => {
             console.error('Failed to generate deck: ', error);
       }
     }
-    const loadDeck = async (documentId) => {
-        dispatch({type: 'LOADING'});
-        try{
-           const response = await flashcardService.getFlashcardsForDocument(documentId)
-            dispatch({
-                type: 'LOAD_SUCCESS',
-                payload: response.data
-            })
-        }catch(error){
-            console.error('Failed to load deck', error);
-       
-        }
-    }
-    const getFlashcardSet = async (setId) => {
-        dispatch({
-            type: 'LOADING'
-        });
-        try{
+     
+        const getFlashcardSet = useCallback(async (setId) => {
+        dispatch({ type: 'LOADING' });
+        try {
             const response = await flashcardService.getFlashcardSetById(setId);
-            dispatch({
-                type: 'LOAD_SUCCESS',
-                payload: response.data
-            }) 
-        }catch(error){
-            console.error("failed to fetch flashcard set ", error);        
+            dispatch({ type: 'LOAD_SUCCESS', payload: response.data });
+        } catch (error) {
+            console.error('Failed to fetch flashcard set', error);
+            toast.error('Failed to load flashcard set');
         }
-    }
+    }, []);
+
     const handleNextCard = async (setId, cardId) => {
-        try{
-            const response = await flashcardService.reviewFlashcard(setId, cardId);
-            dispatch({
-                payload: response.data
-            }) 
-        }catch(error){
-            console.error('')
-        }
+     
         dispatch({ type: 'NEXT_CARD'})
 
     }
     const handlePrevCard = () => {
         dispatch({type: 'PREV_CARD'});
     }
-    const handleReview = async (cardId, setId) => {
+    const handleReview = async (setId, cardId) => {
+        console.log('handleReview called with:', {  setId,cardId, });
         let predictedCount;
-      let targetedCard = deck.cards.find(card => card._id === cardId)
+      let targetedCard = state.deck?.cards?.find(card => card._id === cardId);
+      if (!targetedCard) return;
         predictedCount = targetedCard.reviewCount + 1;
             
         dispatch({ 
@@ -139,15 +141,36 @@ export const StudyProvider = ({children}) => {
     
         dispatch({ type: 'NEXT_CARD' });
         try {
-           const response = await flashcardService.reviewFlashcard(setId, cardId);  
+             
+            await flashcardService.reviewFlashcard(setId, cardId);  
         } catch (error) {
-            console.error("Failed to save to database", error);
-        toast.error('Card review failed')
+            toast.error('Card review failed')
         }
     };
+    const handleToggleStar = async (cardId, setId) => {
+        dispatch({ type: 'TOGGLE_STAR_LOCAL', payload: { cardId } });
+        try {
+            await flashcardService.toggleStar(setId, cardId);
+            const targetedCard = state.deck.cards.find(card => card._id === cardId);
+            targetedCard.isStarred === false ? toast.success('card successfully starred') : toast.success('card is no longer starred');
+        } catch (error) {
+            toast.error('Failed to star card');
+            dispatch({ type: 'TOGGLE_STAR_LOCAL', payload: { cardId } });
+        }
+    };
+    const handleDelete = async(id) => {
+        dispatch({type: 'DELETE_SET', payload: id});
+        try{
+            await flashcardService.deleteFlashcardSet(id);
+            toast.success('Flashcard set successfully deleted');
+        }catch(error){
+            console.error('Failed to delete flashcard set');
+            toast.error('Failed to delete flashcard set');
+        }
+    }
+    
 
-
-    const activeCard = state.deck.length > 0 ? state.deck[state.currentIndex] : null;
+    const activeCard = state.deck?.cards?.[state.currentIndex] ?? null;
 
     const value = {
         deck: state.deck,
@@ -155,14 +178,14 @@ export const StudyProvider = ({children}) => {
         currentIndex: state.currentIndex,
         isFinished: state.isFinished,
         isLoading: state.isLoading,
-        sessionScore: state.sessionScore,
-        totalCards: state.deck.length,
-        loadDeck,
+        totalCards: state.deck?.cards?.length || 0,
         generateDeck,
         handleReview,
+        handleToggleStar,
         getFlashcardSet,
         handleNextCard,
-        handlePrevCard
+        handlePrevCard,
+        handleDelete
       
     };
 

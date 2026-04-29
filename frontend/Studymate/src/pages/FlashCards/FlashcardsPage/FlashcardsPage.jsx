@@ -7,30 +7,99 @@ import {
   LucideChevronLeftSquare,
   Rotate3DIcon,
   Star,
-  BrainCircuit
+  BrainCircuit,
+  Trophy,
+  RotateCcw
 } from "lucide-react";
 import './FlashcardsPage.scss';
 
 const FlashcardPage = () => {
   const { setId } = useParams();
   const navigate = useNavigate();
-  const { getFlashcardSet,deck, handleNextCard,
-     currentIndex, handlePrevCard, handleReview } = useStudy();
+  const {     
+    getFlashcardSet,
+    deck,
+    handleNextCard,
+    handlePrevCard,
+    handleReview,
+    handleToggleStar,
+    currentIndex,
+    isLoading,
+    isFinished,
+    totalCards,} = useStudy();
   const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
     if (setId) {
       getFlashcardSet(setId);
     }
-  }, [setId]);
+  }, [setId, getFlashcardSet]);
+
+   useEffect(() => {
+    setIsFlipped(false);
+  }, [currentIndex]);
+
+  const handleSmartNext = () => {
+    
+    if (isFlipped) {
+       console.log('cardId:', deck?.cards[currentIndex]._id);
+        console.log('setId:', deck._id);
+      handleReview(deck._id, deck?.cards[currentIndex]._id);
+        
+    } else {
+        
+       setIsFlipped(true)
+    }
+    
+    
+}
+   if (isLoading) {
+    return (
+      <div className="flashcard-page flashcard-page--centered">
+        <div className="flashcard-page__spinner" />
+        <div className="loading-spinner"/>
+        <p className="spinner-text">Loading flashcards...</p>
+      </div>
+    );
+  }
+   if (!isLoading && !deck?.cards?.length) {
+    return (
+      <div className="flashcard-page flashcard-page--centered">
+        <p>No flashcards found for this set.</p>
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
+    );
+  }
+   if (isFinished) {
+  const masteredCount = deck.cards.filter(c => c.isMastered).length;
+  return (
+    <div className="flashcard-page flashcard-page--centered">
+      <Trophy size={64} className="flashcard-page__finish-icon" />
+      <h2 className="flashcard-page__finish-title">Session Complete!</h2>
+      <p className="flashcard-page__finish-score">
+        <span>{masteredCount}</span> / {totalCards} cards Reviewed
+      </p>
+      <div className="flashcard-page__finish-actions">
+        <button
+          className="nav-btn nav-btn--primary"
+          onClick={() => getFlashcardSet(setId)}
+        >
+          <RotateCcw size={16} /> Restart
+        </button>
+        <button
+          className="nav-btn nav-btn--secondary"
+          onClick={() => navigate(-1)}
+        >
+          Back to Sets
+        </button>
+      </div>
+    </div>
+  );
+}
+  const currentCard = deck?.cards?.[currentIndex];
 
    console.log('deck cards: ', deck.cards) 
-   console.log('deck: ', deck) 
-  /* console.log('deck', deck?.cards?.[1]?.question); */
-  const handleReviewCard = () => {
 
-    handleReview( cardId = deck?.cards[currentIndex]._id, setId = deck._id, )
-  }
   return (
     <div className="flashcard-page">
       <div className="flashcard-page__header">
@@ -57,24 +126,29 @@ const FlashcardPage = () => {
                     <BrainCircuit size={180} />
                 </div>
               <div className="flashcard-page__card-details">
-                <span>Easy</span>
-               <button className="flashcard-page__star-btn"
-               onClick={(e) => {
+                <span className="flashcard-page__difficulty">{currentCard?.isMastered ? 'Mastered': 'Learning'}</span>
+               <button
+                  className="flashcard-page__star-btn"
+                  onClick={(e) => {
                     e.stopPropagation();
-               }}   
-               > 
-                <Star size={20} />
+                    handleToggleStar(currentCard._id, deck._id);
+                  }}
+                >
+                  {currentCard?.isStarred
+                    ? <Star size={20} fill="#FFD700" color="#FFD700" />
+                    : <Star size={20} color="currentColor" />
+                  }
                 </button>
               </div>
               <div className="flashcard-page__content">
-                {deck?.cards?.[currentIndex]?.question}
+                {currentCard?.question}
                
               </div>
               <span className="flashcard-page__hint"><Rotate3DIcon size={12}/>Click to see answer</span>
             </div>
             <div className="flashcard-page__card-side flashcard-page__card-side--back">
               <div className="flashcard-page__content">
-                {deck?.cards?.[currentIndex]?.answer}
+                {currentCard?.answer}
               </div>
               <span className="flashcard-page__hint"> <Rotate3DIcon size={12}/> Click to see question</span>
             </div>
@@ -91,10 +165,9 @@ const FlashcardPage = () => {
           </button>
           <span> {currentIndex + 1} / {deck?.cards?.length}</span>
           <button className="nav-btn"
-          onClick={handleReviewCard}
-          disabled = { currentIndex >= deck?.cards?.length - 1}
+          onClick={handleSmartNext}
           >
-            Next <ChevronRight />
+            {isFlipped ? 'Got it': 'Show Answer'}<ChevronRight />
           </button>
         </div>
 

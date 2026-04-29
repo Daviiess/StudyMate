@@ -24,7 +24,8 @@ export const API_PATHS = {
     CHAT: "/api/ai/chat",
     EXPLAIN_CONCEPT: "/api/ai/explain-concept",
     GET_CHAT_HISTORY: (documentId) => `/api/ai/chat-history/${documentId}`,
-  },
+  },/* router.patch('/:setId/review/:cardId', reviewFlashcard);
+  router.patch('/:setId/star/:cardId', toggleStarFlashcard); */
   FLASHCARDS: {
     GET_ALL_FLASHCARD_SETS: "/api/flashcards",
     GET_FLASHCARDS_FOR_DOC: (documentId) => `/api/flashcards/${documentId}`,
