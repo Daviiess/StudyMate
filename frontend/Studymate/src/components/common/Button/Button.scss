@@ -22,4 +22,7 @@
     transform: translateY(-0.16rem) scale(0.98);
     box-shadow: 0 0.4rem 1.2rem -0.4rem rgba($color-Accent, 0.5);
   }
+  &:disabled{
+    cursor: not-allowed;
+  }
 }

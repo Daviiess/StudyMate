@@ -4,7 +4,7 @@ const Button = ({
     children,
     onClick,
     type = 'button',
-    disabled = false,
+    disabled,
     className
 }) => {
   return (

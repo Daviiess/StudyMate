@@ -97,7 +97,7 @@ const DeckOverviewPage = () => {
               <EmptyDeckIllustration/>
             </div>
             <h2>No Flashcards generated</h2>
-            <p>Generate flashcards from your document to start learning and reinforce your knowledge</p>
+            <p>Reinforce core concepts through a curated series of active-recall study cards.</p>
            <div className='flashcard__option-holder'>
             
              <Button disabled = {deckLoading} onClick={() => setIsGenerating(true)}>

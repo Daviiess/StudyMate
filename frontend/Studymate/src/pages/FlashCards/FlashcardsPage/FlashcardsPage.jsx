@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Note: react-router-dom
 import { useStudy } from "../../../context/StudyContext";
+import toast from "react-hot-toast";
 import {
   ChevronLeft,
   ChevronRight,
@@ -71,13 +72,14 @@ const FlashcardPage = () => {
     );
   }
    if (isFinished) {
+    toast.success('Cards need to be reviewed 3 times before being mastered');
   const masteredCount = deck.cards.filter(c => c.isMastered).length;
   return (
     <div className="flashcard-page flashcard-page--centered">
       <Trophy size={64} className="flashcard-page__finish-icon" />
       <h2 className="flashcard-page__finish-title">Session Complete!</h2>
       <p className="flashcard-page__finish-score">
-        <span>{masteredCount}</span> / {totalCards} cards Reviewed
+        <span>{masteredCount}</span> / {totalCards} cards mastered
       </p>
       <div className="flashcard-page__finish-actions">
         <button
@@ -126,7 +128,7 @@ const FlashcardPage = () => {
                     <BrainCircuit size={180} />
                 </div>
               <div className="flashcard-page__card-details">
-                <span className="flashcard-page__difficulty">{currentCard?.isMastered ? 'Mastered': 'Learning'}</span>
+                <span className={`flashcard-page__difficulty ${currentCard?.isMastered ? 'gold' : ''}`}>{currentCard?.isMastered ? 'Mastered': 'Learning'}</span>
                <button
                   className="flashcard-page__star-btn"
                   onClick={(e) => {

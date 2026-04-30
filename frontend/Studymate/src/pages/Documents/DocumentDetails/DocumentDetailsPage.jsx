@@ -15,6 +15,7 @@ import AiConcepts from '../../../components/AiConcepts/AiConcepts';
 import SummaryAction from '../../../components/Summarize-action/SummaryAction';
 import DeckOverviewPage from '../../FlashCards/DeckOverviewPage/DeckOverviewPage';
 import { useSearchParams } from 'react-router';
+import QuizzesList from '../../Quizzes/QuizList/QuizzesList';
 const DocumentDetailsPage = () => {
   const {id} = useParams();
   const [document , setDocument] = useState(null);
@@ -100,7 +101,7 @@ console.log(pdfUrl);
     return <DeckOverviewPage/>;
   }
   const renderQuizTab = () => {
-    return 'QuizzesTab'
+    return <QuizzesList/>
   };
   
   const tabs = [

@@ -10,7 +10,7 @@ import Modal from '../../../components/common/Modal/Modal.jsx';
 import Portal from '../../../components/common/Portal/Portal.jsx';
 const DocumentListPage = () => {
   const [documents, setDocuments] = useState([]);
-  const [loading , setLoading] = useState(true);
+  const [loading , setLoading] = useState(false);
 
   // state for upload modal
    const [isUpModalOpen, setIsUpModalOpen] = useState(false);
@@ -25,6 +25,7 @@ const DocumentListPage = () => {
 
    
    const fetchDocuments = async () => {
+    setLoading(true);
     try{
       const response = await documentService.getDocuments();
       const docArray = response.data || [];
@@ -125,7 +126,7 @@ const DocumentListPage = () => {
           <p>Get started by uploading your first PDF document
             to begin learning.
           </p>
-          <Button onClick={() => setIsUpModalOpen(modal => !modal) }> <Plus/> Upload Document  </Button>
+          <Button onClick={() => setIsUpModalOpen(modal => !modal) } disabled={loading}> <Plus/> Upload Document  </Button>
         </div>
       )
 
@@ -152,7 +153,7 @@ const DocumentListPage = () => {
         <h2>My Documents</h2>
         <p>Manage your learning materials</p>
       </div>
-     <Button onClick={() => setIsUpModalOpen(modal => !modal)}> <Plus size={18}/> Upload Document</Button>
+     <Button onClick={() => setIsUpModalOpen(modal => !modal)} disabled={loading}> <Plus size={18}/> Upload Document</Button>
       </div>
     <div className=''>
       {renderContent()}
