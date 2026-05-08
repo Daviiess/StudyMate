@@ -187,8 +187,8 @@ const DeckOverviewPage = () => {
             <Flashcard 
              onDelete = {handleDelete} 
               card={card} 
-              key={card._id} 
-              index={index} 
+              key={card?._id} 
+              index={deck?.length - index} 
               documentId={documentId} 
             />
           ))

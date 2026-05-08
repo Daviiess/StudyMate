@@ -5,7 +5,7 @@ const Modal = ({data, deleteModal, deleteDocument,deleting}) => {
     <div className='delete-modal'>
       <div className='delete-modal__overlay'>
          <h3>Confirm delete</h3>
-         <p>Are you sure you want to delete {data.title} </p>
+         <p>Are you sure you want to delete {data?.title} </p>
         <div className='delete-modal__actions'> 
       <button className='delete-modal__actions--cancel-btn' onClick={deleteModal}>Cancel</button>
       <button className='delete-modal__actions--delete-btn' onClick={deleteDocument} disabled = {deleting}>Delete</button>

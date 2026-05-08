@@ -45,7 +45,7 @@ const {loading , isAuthenticated} = useAuth();
          <Route path='/documents/:id/overview' element={<DeckOverviewPage />}/> */
          <Route path='/documents/:documentId/flashcards/:setId' element={<FlashcardsPage/>}/>
           <Route path='/quizzes/:quizId' element = {<QuizTakePage/>}/>
-          <Route path='/quizzes:quizId/results' element = {<QuizResultPage/>}/>
+          <Route path='/quizzes/:quizId/results' element = {<QuizResultPage/>}/>
           <Route path='/profile' element = {<ProfilePage/>}/>
         </Route>
         <Route path='*' element = {<NotFoundPage/>}></Route>

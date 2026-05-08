@@ -12,10 +12,10 @@ const DashBoardPage = () => {
   const [dashboardData , setDashboardData] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchDashboardData = async () => {
-      
+      setLoading(true);
       try{
         const response = await progressService.getDashboardData();
         setLoading(true);

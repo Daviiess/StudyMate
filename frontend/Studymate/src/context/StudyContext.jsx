@@ -10,7 +10,7 @@ const initialState = {
     currentIndex: 0,
     isFinished: false,
     isLoading: false,
-   
+    
 };
 
 
@@ -91,7 +91,7 @@ export const StudyProvider = ({children}) => {
     const [state, dispatch] = useReducer(studyReducer, initialState);
 
     const generateDeck = async (documentId, options) => {
-        dispatch({type: 'LOADING'})
+    dispatch({type: 'LOADING'})
         try{
             const response = await aiService.generateFlashcards(documentId, options);
             dispatch({ 

@@ -8,6 +8,7 @@ import './QuizzesList.scss';
 import QuizCard from '../../../components/quizzes/QuizCard.jsx';
 import aiService from '../../../services/aiService.js';
 import toast from 'react-hot-toast';
+import Modal from '../../../components/common/Modal/Modal.jsx';
 
 const QuizzesList = () => {
 const [quizzes , setQuizzes] = useState([]);
@@ -15,6 +16,10 @@ const [loading, setLoading] = useState(false);
 const [quizCount, setQuizCount] = useState(5);
 const {id: documentId} = useParams();
 const [isGenerating , setIsGenerating] = useState(false);
+const [isDeleting , setIsDeleting] = useState(false);
+const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); 
+const [quizSelected, setQuizSelected] = useState(null);
+
 const options = {
     quizCount
 }
@@ -34,7 +39,8 @@ console.error('Failed to fetch quizzes set', error);
 }
 useEffect(() => {
 if(documentId) fetchQuiz();
-}, [documentId])
+}, [documentId]);
+
 
 
 
@@ -42,10 +48,12 @@ const generateQuiz = async() => {
     setLoading(true)
         try{
         setIsGenerating(false);
-        await aiService.generateQuiz(documentId);
+        await aiService.generateQuiz(documentId,options);
         await fetchQuiz();
+        toast.success('Quiz generated successfully');
         }catch(error){
             console.error('Failed to generate quiz: ', error)
+            toast.error('Failed to generate Quiz');
         }finally{
             setLoading(false)
         }
@@ -109,12 +117,35 @@ const generateQuiz = async() => {
       </div>
     );
   }
+  console.log('selected: ', quizSelected);
+  const deleteModal = () => {
+    setIsDeleteModalOpen(prev => !prev);
 
+  }
+  const handleDeleteRequest = (quiz) => {
+    setQuizSelected(quiz);
+    deleteModal();
+  }
+  const handleDelete = async() => {
+    setIsDeleting(true)
+    if(!quizSelected) return;
+  try{
+    console.log(quizSelected._id);
+    await quizService.deleteQuiz(quizSelected._id);
+    setIsDeleteModalOpen(false)
+    setQuizSelected(null);
+    setQuizzes(quizzes.filter(quiz => quiz._id !== quizSelected._id));
+  }catch(error){
+    toast.error('Failed to delete quiz ')
+    console.error('Failed to delete quiz', error);
+  }
+  setIsDeleting(false);
+}
   return (
     <div className='quiz-list'>
         <div className='quiz-list__header'>
             <div className='quiz-list__text'>
-                2 quiz sets available
+               {quizzes?.length} quiz set{quizzes.length > 1 ? 's' : '' } available
             </div>
             <Button onClick={() => {
                 setIsGenerating(prev => !prev)
@@ -131,14 +162,23 @@ const generateQuiz = async() => {
        <EmptyQuizList/>
        </> :  
        <div className='quiz-list__grid-holder'>
-        {quizzes?.map((quiz) => {
+        {quizzes?.map((quiz, index) => {
+         /*  setQuizSelected(quiz) */
             return(
-                <QuizCard quiz = {quiz}  key={quiz._id}/>
+                <QuizCard quiz = {quiz} 
+                index={quizzes?.length - index} 
+                key={quiz._id} onDelete = {handleDeleteRequest}/>
             )
         })}
         
         </div>}
         {isGenerating && <FlashcardOptionsModal/>}
+        {isDeleteModalOpen && 
+        <>
+        {/* data, deleteModal, deleteDocument,deleting */}
+        <Modal data={quizSelected} deleteModal={deleteModal} deleteDocument={handleDelete} deleting={isDeleting}/>
+        </>
+        }
     </div>
   )
 }

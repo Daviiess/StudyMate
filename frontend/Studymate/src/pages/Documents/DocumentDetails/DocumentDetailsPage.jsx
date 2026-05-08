@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useParams,Link, NavLink } from 'react-router'
+import { useParams,Link } from 'react-router'
 import documentService from '../../../services/documentService';
 import toast from 'react-hot-toast';
-import { ArrowLeft, PanelLeftClose, PanelRight, PanelRightOpen } from 'lucide-react';
+import { ArrowLeft, PanelLeftClose, PanelRightOpen } from 'lucide-react';
 import Spinner from '../../../components/common/Spinner/Spinner';
 import './DocumentDetailsPage.scss';
 import PageHeader from '../../../components/common/PageHeader/PageHeader';
@@ -10,7 +10,6 @@ import Tab from '../../../components/common/Tab/Tab';
 import DocumentViewer from '../../../components/DocumentViewer/DocumentViewer';
 
 import ChatUi from '../../../components/ChatInterface/ChatUi';
-import Ai_Actions from '../../../components/Ai-Actions/Ai_Actions';
 import AiConcepts from '../../../components/AiConcepts/AiConcepts';
 import SummaryAction from '../../../components/Summarize-action/SummaryAction';
 import DeckOverviewPage from '../../FlashCards/DeckOverviewPage/DeckOverviewPage';
@@ -19,7 +18,6 @@ import QuizzesList from '../../Quizzes/QuizList/QuizzesList';
 const DocumentDetailsPage = () => {
   const {id} = useParams();
   const [document , setDocument] = useState(null);
-  /* const [activeTab, setActiveTab] = useState('Document'); */
   const [loading , setLoading] = useState(true);
   const [aiConcept, setAiConcept] = useState(false)
   const [isSummaryModalOpen, setIsSummaryModalOpen] = useState(false);
@@ -147,7 +145,7 @@ console.log(pdfUrl);
           </button>
    
       <PageHeader title = {document.title}/>
-      <Tab activeTab = {activeTab} /* setActiveTab = {setActiveTab} */ tabs = {tabs} handleTabChange = {handleTabChange}/>
+      <Tab activeTab = {activeTab}  tabs = {tabs} handleTabChange = {handleTabChange}/>
       
     </div>
   

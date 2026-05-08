@@ -75,6 +75,7 @@ const FlashcardPage = () => {
     toast.success('Cards need to be reviewed 3 times before being mastered');
   const masteredCount = deck.cards.filter(c => c.isMastered).length;
   return (
+    
     <div className="flashcard-page flashcard-page--centered">
       <Trophy size={64} className="flashcard-page__finish-icon" />
       <h2 className="flashcard-page__finish-title">Session Complete!</h2>
@@ -103,6 +104,7 @@ const FlashcardPage = () => {
    console.log('deck cards: ', deck.cards) 
 
   return (
+    <div className="full-page">
     <div className="flashcard-page">
       <div className="flashcard-page__header">
          <button
@@ -174,6 +176,7 @@ const FlashcardPage = () => {
         </div>
 
       </div>
+    </div>
     </div>
   );
 };

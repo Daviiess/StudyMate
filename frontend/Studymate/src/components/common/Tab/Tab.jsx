@@ -1,6 +1,6 @@
 import React from 'react'
 import './Tab.scss';
-const Tab = ({activeTab, /* setActiveTab, */ tabs, handleTabChange }) => {
+const Tab = ({activeTab, tabs, handleTabChange }) => {
   return (
     <div className='tab'>
 

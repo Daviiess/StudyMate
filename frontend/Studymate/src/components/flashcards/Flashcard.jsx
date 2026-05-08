@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Brain, BrainCircuit, Clock, Trash2 } from 'lucide-react'; 
 import './Flashcard.scss'
-
+import { formatTime } from '../../utils/util';
 import {  useNavigate, useParams } from 'react-router';
 
 
@@ -14,19 +14,6 @@ const Flashcard = ({ card, onDelete, index , documentId}) => {
   
   const navigate = useNavigate();
 
-function formatTime(dateInput) {
-  const date = new Date(dateInput);
-
-  console.log('main id:', id);
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',   
-    day: 'numeric',   
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  }).format(date);
- }
 
 const handleNavigate = () => {
   navigate(`/documents/${documentId}/flashcards/${card._id}`);
@@ -42,11 +29,11 @@ const handleNavigate = () => {
         
         <div className='flashcard__text-details'>
           
-          <p className='flashcard__title'>Flashcard set {index + 1}</p>
+          <p className='flashcard__title'>Flashcard set {index}</p>
         </div>
        <div className='flashcard__footer-items'>
             <Clock size={15}/> 
-            <span>Created {formatTime(card.createdAt) ? formatTime(card.createdAt) : "November 20 2025"}</span> 
+            <span>Created {formatTime(card.createdAt) ? formatTime(card.createdAt) : "Nil"}</span> 
           </div>
         <div className='flashcard__footer'>
           <div className='flashcard__set-holder'>

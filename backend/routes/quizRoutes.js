@@ -12,10 +12,10 @@ const router = express.Router();
 
 router.use(protect);
 
-router.get('/:documentId', getQuizzes);
 router.get('/quiz/:id',    getQuizById);
+router.get('/:documentId', getQuizzes);
 router.post('/:id/submit', submitQuiz);
 router.get('/:id/results', getQuizResults);
-router.get('/:id',         deleteQuiz);
+router.delete('/:id',      deleteQuiz);
 
 export default router;
