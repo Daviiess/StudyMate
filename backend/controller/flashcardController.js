@@ -1,23 +1,32 @@
 import Flashcard from "../models/Flashcard.js";
 
 export const getAllFlashCardSets = async(req, res, next) => {
-    try{
+    try {
         const flashcardSets = await Flashcard.find({
             userId: req.user._id,
-        }).select('-cards')
+        })
         .populate('documentId' , 'title')
-        .sort({createdAt: -1});
-
+        .sort({createdAt: -1})
+        .lean(); 
+        const formattedSets = flashcardSets.map(set => {
+          const cardsCount = set.cards ? set.cards.length : 0;
+            delete set.cards; 
+            return {
+                ...set,
+                totalCards: cardsCount 
+            };
+        });
         
         res.status(200).json({
             success: true,
-            count: flashcardSets.length,
-            data: flashcardSets
-        })
-    }catch(error){
+            count: formattedSets.length,
+            data: formattedSets 
+        });
+
+    } catch(error) {
         next(error);
     }
-} 
+}
 
  export const getFlashcards = async(req, res, next) => {
     try{

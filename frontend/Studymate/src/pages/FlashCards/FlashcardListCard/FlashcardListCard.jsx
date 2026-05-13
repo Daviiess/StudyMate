@@ -1,16 +1,25 @@
 import React from 'react';
 import { BookOpen, TrendingUp, Sparkles } from 'lucide-react';
 import './flashcardListCard.scss';
+import { useNavigate } from 'react-router';
 
 const FlashcardListCard = ({ 
   title = "React JS Concept Guide", 
   timeAgo = "6 MINUTES AGO", 
   totalCards = 10, 
   masteryScore = 50, 
-  reviewedCards = 5 
+  reviewedCards = 5,
+  card 
 }) => {
   // Calculate the progress bar width dynamically
-  const progressPercentage = (reviewedCards / totalCards) * 100;
+   const progressPercentage = (reviewedCards / totalCards) * 100;
+   const navigate = useNavigate();
+   let documentId = card?.documentId._id
+
+console.log('card', card);
+  const handleNavigate = () => {
+  navigate(`/documents/${documentId}/flashcards/${card._id}`);
+  }
 
   return (
     <div className="study-card">
@@ -52,7 +61,7 @@ const FlashcardListCard = ({
       </div>
 
       {/* Action Button */}
-      <button className="study-card__btn">
+      <button className="study-card__btn" onClick={handleNavigate}>
         <Sparkles size={18} />
         <span>Study Now</span>
       </button>
