@@ -123,8 +123,7 @@ const DocumentListPage = () => {
             <FileText strokeWidth={2} size={30}/>
           </div>
           <h3>No Documents Yet</h3>
-          <p>Your document library is currently empty.
-             Upload your first PDF, lecture slide, or study guide to let StudyMate analyze the content and generate your personalized study tools.
+          <p>Your library is empty. Upload a PDF or study guide, and let StudyMate instantly generate your custom learning tools
           </p>
           <Button onClick={() => setIsUpModalOpen(modal => !modal) } disabled={loading}> <Plus/> Upload Document  </Button>
         </div>

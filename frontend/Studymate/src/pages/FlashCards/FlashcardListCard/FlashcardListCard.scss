@@ -5,8 +5,9 @@
  border: $main-border;
   border-radius: 1.6rem;
   padding: 2rem;
+  max-width: 36rem; 
   width: 100%;
-  max-width: 32rem; 
+  
   background-color: #ffffff;
    box-shadow: 0 .6rem 2.4rem -0.4rem rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -68,7 +69,7 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    padding: 0.6rem 1.2rem;
+    padding: .4rem 1rem;
     border-radius: 0.8rem;
     font-size: 1.3rem;
     font-weight: 600;
@@ -77,11 +78,18 @@
       border: 1px solid #e5e7eb;
       color: $color-grey-dark;
       background-color: #ffffff;
+      
+
     }
 
     &--success {
       background-color: rgba($color-Primary,.2);
       color: rgba($color-Primary,.8);
+    }
+
+    &--starred{
+      background-color: #fff;
+      border: $main-border;
     }
   }
 

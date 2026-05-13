@@ -73,7 +73,7 @@ console.log('activeQuestion', activeQuestion)
       <span className='quiz-take__return-nav' onClick={() => {
         navigate(-1);
       }}>
-        <ArrowBigLeft/> Back to quiz set
+        <ArrowBigLeft/> Back
       </span>
       <h2> {quiz.title} </h2>
       </div>

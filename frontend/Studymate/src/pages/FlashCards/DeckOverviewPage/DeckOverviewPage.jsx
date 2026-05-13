@@ -20,6 +20,7 @@ const DeckOverviewPage = () => {
   count,
   difficulty
 }
+
   const fetchDeck = async() => {
     setDeckLoading(true);
     try{
@@ -64,7 +65,7 @@ const DeckOverviewPage = () => {
   }
 
 
-  
+  console.log('deck', deck);
   const EmptyDeckIllustration = () => (
   <svg 
     width="160" 

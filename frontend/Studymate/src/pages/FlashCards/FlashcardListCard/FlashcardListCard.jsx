@@ -1,21 +1,24 @@
 import React from 'react';
-import { BookOpen, TrendingUp, Sparkles } from 'lucide-react';
+import { BookOpen, TrendingUp, Sparkles, StarsIcon, StarIcon } from 'lucide-react';
 import './flashcardListCard.scss';
 import { useNavigate } from 'react-router';
+import { formatTimeAgo, truncateTitle } from '../../../utils/util';
 
 const FlashcardListCard = ({ 
-  title = "React JS Concept Guide", 
+ 
   timeAgo = "6 MINUTES AGO", 
   totalCards = 10, 
-  masteryScore = 50, 
+
   reviewedCards = 5,
   card 
 }) => {
   // Calculate the progress bar width dynamically
-   const progressPercentage = (reviewedCards / totalCards) * 100;
+   const progressPercentage = (card?.reviewedCardsCount / card?.totalCards) * 100;
+   const masteryScore = (card?.masteredCount / card?.totalCards ) * 100;
    const navigate = useNavigate();
-   let documentId = card?.documentId._id
-
+   let documentId = card?.documentId._id;
+   let title = truncateTitle(card?.documentId?.title)
+   let time = formatTimeAgo(card?.createdAt);
 console.log('card', card);
   const handleNavigate = () => {
   navigate(`/documents/${documentId}/flashcards/${card._id}`);
@@ -31,18 +34,22 @@ console.log('card', card);
         </div>
         <div className="study-card__header-info">
           <h3 className="study-card__title">{title}</h3>
-          <p className="study-card__time">CREATED {timeAgo}</p>
+          <p className="study-card__time">CREATED {time}</p>
         </div>
       </div>
 
       {/* Stats Pills */}
       <div className="study-card__stats">
         <div className="study-card__pill study-card__pill--neutral">
-          <span>{totalCards} Cards</span>
+          <span className='spanny'>{card?.totalCards} Cards</span>
         </div>
         <div className="study-card__pill study-card__pill--success">
           <TrendingUp size={16} strokeWidth={2.5} />
           <span>{masteryScore}%</span>
+        </div>
+        <div className='study-card__pill study-card__pill--starred'>
+        <StarIcon fill='gold'color='#fff'/>
+        <span>{card?.starredCount}</span>
         </div>
       </div>
 
@@ -50,7 +57,7 @@ console.log('card', card);
       <div className="study-card__progress-section">
         <div className="study-card__progress-header">
           <span className="study-card__progress-label">Progress</span>
-          <span className="study-card__progress-text">{reviewedCards}/{totalCards} reviewed</span>
+          <span className="study-card__progress-text">{card?.reviewedCardsCount } / {card?.totalCards} reviewed</span>
         </div>
         <div className="study-card__progress-track">
           <div 

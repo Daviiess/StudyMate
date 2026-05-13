@@ -4,19 +4,12 @@ import FlashcardListCard from '../FlashcardListCard/FlashcardListCard';
 import './FlashcardsListPage.scss';
 import flashcardService from '../../../services/flashcardService';
 import { useStudy } from '../../../context/StudyContext';
+import Button from '../../../components/common/Button/Button';
+import { useNavigate } from 'react-router';
 const FlashcardsListPage = () => {
   const [cardList , setCardList] = useState([]);
   const [loading , setLoading] = useState(false);
- const {totalCards} = useStudy();
- console.log('total',totalCards);
-  const arr = [
-  {id: 1, text: 'rat'},
-  {id: 2, text: 'cat'},
-  {id: 3, text: 'tat'},
-  {id: 4, text: 'fat'},
-  {id: 5, text: 'bat'},
-]
-console.log('documentID', cardList[0]?.documentId?._id)
+const navigate = useNavigate()
 const fetchAllCards = async()=> {
   setLoading(true);
   try{
@@ -26,6 +19,13 @@ const fetchAllCards = async()=> {
     setLoading(false)
   }catch(error){
     console.error('Failed to load flashcards list');
+  }
+}
+function EmptyFlashcard(){
+  if(!cardList || cardList?.length){
+    <div>
+      No flashcards generated
+    </div>
   }
 }
 useEffect(()=> {
@@ -40,7 +40,15 @@ console.log('all cards: ',cardList);
         Track your progress, review difficult concepts,
          and build your knowledge base</p>
       </div>
-      <div className='flashcardList-page__grid-holder'>
+    { (cardList.length === 0 || !cardList) ?
+      <div className='flashcardList-page__empty-page'> 
+       <h2>No flashcards generated</h2>
+       <p>Click the link below to navigate to document tab</p>
+       <Button onClick={() => {
+        navigate('/documents')
+       }}>Go to documents</Button>
+        </div>
+        : <div className='flashcardList-page__grid-holder'>
       {cardList?.map((card, index) => {
       return(
         <div key={index}>
@@ -48,7 +56,8 @@ console.log('all cards: ',cardList);
         </div>
       )
         })}
-      </div>
+      </div> 
+        }
  
     </div>
   )

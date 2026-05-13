@@ -105,7 +105,7 @@ const QuizResultPage = () => {
 
       {/* HEADER */}
       <div className="quiz-results__header">
-        <button onClick={() => navigate(-1)}>Back to sets</button>
+        <button onClick={() => navigate(-1)}>Go Back </button>
         <h2 className="quiz-results__title">{displayTitle}</h2>
       </div>
 
@@ -140,12 +140,6 @@ const QuizResultPage = () => {
           )}
         </div>
 
-       {/*  <button
-          className="quiz-results__retry-btn"
-          onClick={() => navigate(`/quizzes/${quizId}`)}
-        >
-          <RotateCcw size={16} /> Retry Quiz
-        </button> */}
       </div>
 
       {/* DETAILED REVIEW */}

@@ -115,7 +115,7 @@ const FlashcardPage = () => {
           className="flashcard-page__exit-btn"
         >
           <LucideChevronLeftSquare />
-          Back to Sets
+          Back
         </button> 
       </div>
 

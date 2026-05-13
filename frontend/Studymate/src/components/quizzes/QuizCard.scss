@@ -26,7 +26,7 @@
     }
 
       &__flex {
-        padding: 2rem;
+        padding: 2rem 1.8rem;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -97,7 +97,7 @@
         justify-content: center;
         background-color: rgba($color-Accent, .6);
         border: none;
-        padding: .8rem;
+        padding: 1rem;
         border-radius: 1rem;
         color: #fff;
         gap: .5rem;

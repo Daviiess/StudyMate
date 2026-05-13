@@ -8,12 +8,19 @@ export const getAllFlashCardSets = async(req, res, next) => {
         .populate('documentId' , 'title')
         .sort({createdAt: -1})
         .lean(); 
-        const formattedSets = flashcardSets.map(set => {
-          const cardsCount = set.cards ? set.cards.length : 0;
+          const formattedSets = flashcardSets.map(set => {
+            const totalCards = set.cards?.length || 0;
+            const masteredCount = set.cards?.filter(card => card.isMastered === true).length || 0;
+            const starredCount = set.cards?.filter(card => card.isStarred === true).length || 0;
+            const reviewedCardsCount = set.cards?.filter(card => card.reviewCount > 0).length || 0;
             delete set.cards; 
+
             return {
                 ...set,
-                totalCards: cardsCount 
+                totalCards,
+                masteredCount,
+                reviewedCardsCount ,
+                starredCount
             };
         });
         
@@ -102,7 +109,7 @@ export const getAllFlashCardSets = async(req, res, next) => {
         flashcardSet.cards[cardIndex].lastReviewed = new Date();
         flashcardSet.cards[cardIndex].reviewCount += 1;
         flashcardSet.cards[cardIndex].isMastered = flashcardSet.cards[cardIndex].reviewCount >= 3
-       
+       flashcardSet.markModified('cards');
         await flashcardSet.save();
 
         res.status(200).json({
@@ -139,6 +146,7 @@ export const getAllFlashCardSets = async(req, res, next) => {
     }
     //Toggle star
    flashcardSet.cards[cardIndex].isStarred = !flashcardSet.cards[cardIndex].isStarred;
+   flashcardSet.markModified('cards');
     await flashcardSet.save();
     res.status(200).json({
         success: true,
