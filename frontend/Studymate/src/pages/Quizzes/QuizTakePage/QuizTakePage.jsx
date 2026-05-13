@@ -35,7 +35,7 @@ import { useQuiz } from '../../../context/QuizContext';
 }, [isFinished]);
 
   
-  const options = quiz?.questions?.[currentIndex].options;
+/*   const options = quiz?.questions?.[currentIndex].options; */
 console.log('options:', quiz?.questions?.[currentIndex].options)
   useEffect(() => {
     if(quizId) loadQuiz(quizId)
@@ -61,8 +61,9 @@ console.log('activeQuestion', activeQuestion)
     );
   }
     const selectedAnswer = answers[activeQuestion?._id] ?? '';
+    console.log('answers: ', answers)
     const isLastQuestion = currentIndex === totalQuestions - 1;
-
+  console.log(activeQuestion)
   return (
    <div className='quiz-take'>
     <h1>Welcome To Quiz</h1>
@@ -101,7 +102,8 @@ console.log('activeQuestion', activeQuestion)
        {activeQuestion.question}
       </div>
         { <ul className='quiz-take__options-holder'>
-          {options?.map((option, index) => {
+          {activeQuestion?.options?.map((option, index) => {
+            console.log('option', option)
             const isSelected = selectedAnswer === option;
             return(
               <li key={index} 

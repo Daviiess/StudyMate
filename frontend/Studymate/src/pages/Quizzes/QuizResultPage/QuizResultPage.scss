@@ -51,9 +51,9 @@
     font-weight: 800;
     margin: 0 0 0.5rem 0;
     
-    &--low { color: #ef4444; } // Red for 20%
-    &--medium { color: #f59e0b; } // Orange/Yellow
-    &--high { color: #10b981; } // Green
+    &--low { color: #ef4444; } 
+    &--medium { color: #f59e0b; } 
+    &--high { color: #10b981; } 
   }
 
   &__score-message {
@@ -62,7 +62,6 @@
     margin-bottom: 3rem;
   }
 
-  /* STAT PILLS */
   &__stats-container {
     display: flex;
     gap: 1.5rem;
@@ -94,8 +93,8 @@
       color: #dc2626;
     }
   }
-/* review-section */
-  /* --- DETAILED REVIEW SECTION --- */
+
+
   &__review-section{
     
     height: calc(100vh - 59rem);
@@ -166,7 +165,9 @@
       color: #ef4444;
     }
   }
-
+.wrong-option{
+ color: #ef4444;
+}
   &__question-text {
     font-size: 1.8rem;
     font-weight: 600;
@@ -194,8 +195,8 @@
     transition: all 0.2s ease;
 
     &--correct {
-      background: #ecfdf5; // Very light green
-      border-color: #34d399; // Stronger green border
+      background: #ecfdf5; 
+      border-color: #34d399;
       color: #065f46;
       font-weight: 500;
     }
@@ -212,7 +213,7 @@
 
   /* EXPLANATION BOX */
   &__explanation {
-    background: #f8fafc; // Slate 50
+    background: #f8fafc; 
     border-radius: 0.8rem;
     padding: 1.5rem;
     display: flex;
@@ -221,7 +222,7 @@
   }
 
   &__explanation-icon {
-    background: #e2e8f0; // Slate 200
+    background: #e2e8f0; 
     color: #475569;
     padding: 0.8rem;
     border-radius: 0.6rem;
@@ -249,5 +250,12 @@
     color: #334155;
     line-height: 1.6;
     margin: 0;
+  }
+  &--centered{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   height: calc(100vh - 20rem);
   }
 }

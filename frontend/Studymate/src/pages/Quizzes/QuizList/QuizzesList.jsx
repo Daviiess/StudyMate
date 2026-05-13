@@ -21,7 +21,7 @@ const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 const [quizSelected, setQuizSelected] = useState(null);
 
 const options = {
-    quizCount
+    numQuestions: quizCount
 }
 async function fetchQuiz (){
 setLoading(true);

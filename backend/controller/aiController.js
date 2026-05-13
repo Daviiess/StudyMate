@@ -9,7 +9,7 @@ import { findRelevantChunks } from "../utils/textChunker.js";
 
 export const generateFlashcards = async(req, res , next) => {
     try{
-        const {documentId, count = 10} = req.body;
+        const {documentId, count = 10, difficulty = 'medium'} = req.body;
         if(!documentId){
             return res.status(404).json({
                 success: false,
@@ -30,7 +30,7 @@ export const generateFlashcards = async(req, res , next) => {
             });
         };
 
-        const cards = await geminiService.generateFlashcards(document.extractedText, parseInt(count));
+        const cards = await geminiService.generateFlashcards(document.extractedText, parseInt(count), difficulty);
         const flashcardSet = await Flashcard.create({
              userId: req.user._id,
             documentId: document._id,
@@ -54,7 +54,7 @@ export const generateFlashcards = async(req, res , next) => {
 }
 export const generateQuiz = async (req, res, next) => {
     try{
-         const {documentId, numQuestions = 5, title } = req.body;
+         const {documentId, numQuestions = 10, title } = req.body;
            if(!documentId){
          return res.status(400).json({
             success: false,

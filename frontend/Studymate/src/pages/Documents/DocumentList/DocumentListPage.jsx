@@ -123,8 +123,8 @@ const DocumentListPage = () => {
             <FileText strokeWidth={2} size={30}/>
           </div>
           <h3>No Documents Yet</h3>
-          <p>Get started by uploading your first PDF document
-            to begin learning.
+          <p>Your document library is currently empty.
+             Upload your first PDF, lecture slide, or study guide to let StudyMate analyze the content and generate your personalized study tools.
           </p>
           <Button onClick={() => setIsUpModalOpen(modal => !modal) } disabled={loading}> <Plus/> Upload Document  </Button>
         </div>
@@ -150,8 +150,8 @@ const DocumentListPage = () => {
     <div className='doc-list'>
       <div className='doc-list__header'>
       <div className='doc-list__header-text-holder'>
-        <h2>My Documents</h2>
-        <p>Manage your learning materials</p>
+        <h2 className='doc-list__header--heading'>My Documents</h2>
+        <p className='doc-list__header--text'>All your study materials in one place. Upload, manage, and analyze your documents with StudyMate's AI.</p>
       </div>
      <Button onClick={() => setIsUpModalOpen(modal => !modal)} disabled={loading}> <Plus size={18}/> Upload Document</Button>
       </div>

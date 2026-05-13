@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Brain, BrainCircuit, Clock, CloudLightning, GitGraph, Play, Trash2 } from 'lucide-react'; 
+import { Brain, BrainCircuit, ClipboardCheck, Clock, CloudLightning, GitGraph, Play, Trash2, UserCheck } from 'lucide-react'; 
 import './QuizCard.scss';
 import {  useNavigate, useParams } from 'react-router';
 import { formatTime } from '../../utils/util';
@@ -44,9 +44,9 @@ const handleNavigate = () => {
         </div>
         <div className='quiz-card__footer'>
          {quiz?.completedAt 
-    ? <button className='quiz-card__start-btn'
+    ? <button className='quiz-card__view-result'
      onClick={() => navigate(`/quizzes/${quiz._id}/results`)}>
-        View Result
+        <ClipboardCheck size={20} color='#fff' /> View Result
       </button> 
     : <button className='quiz-card__start-btn' onClick={handleNavigate}>
         <Play size={20}/> Take Quiz

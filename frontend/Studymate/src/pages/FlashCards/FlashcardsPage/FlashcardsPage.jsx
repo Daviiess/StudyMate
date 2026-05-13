@@ -56,11 +56,13 @@ const FlashcardPage = () => {
 }
    if (isLoading) {
     return (
-      <div className="flashcard-page flashcard-page--centered">
+    <div className="finish-page-holder">
+        <div className="flashcard-page flashcard-page--centered">
         <div className="flashcard-page__spinner" />
-        <div className="loading-spinner"/>
+        <div className="spinner-loader-circle"/>
         <p className="spinner-text">Loading flashcards...</p>
       </div>
+    </div>
     );
   }
    if (!isLoading && !deck?.cards?.length) {
@@ -75,7 +77,7 @@ const FlashcardPage = () => {
     toast.success('Cards need to be reviewed 3 times before being mastered');
   const masteredCount = deck.cards.filter(c => c.isMastered).length;
   return (
-    
+    <div className="finish-page-holder">
     <div className="flashcard-page flashcard-page--centered">
       <Trophy size={64} className="flashcard-page__finish-icon" />
       <h2 className="flashcard-page__finish-title">Session Complete!</h2>
@@ -97,12 +99,13 @@ const FlashcardPage = () => {
         </button>
       </div>
     </div>
+    </div>
   );
 }
   const currentCard = deck?.cards?.[currentIndex];
 
    console.log('deck cards: ', deck.cards) 
-
+/* MAIN PAGE */
   return (
     <div className="full-page">
     <div className="flashcard-page">

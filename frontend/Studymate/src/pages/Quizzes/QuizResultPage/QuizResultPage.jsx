@@ -1,48 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trophy, Target, CheckCircle2, XCircle, BookOpen, Check, RotateCcw } from 'lucide-react';
 import './QuizResultPage.scss'; 
 import { useQuiz } from '../../../context/QuizContext';
 import { useParams, useNavigate } from "react-router-dom"; 
+import quizService from '../../../services/quizService';
+import toast from 'react-hot-toast';
 
 const QuizResultPage = () => {
   const { quizId } = useParams();
   const navigate = useNavigate();
-  const { quiz, score, correctCount, userAnswers, totalQuestions, loadQuiz } = useQuiz();
+  const { quiz, score, correctCount, userAnswers, totalQuestions } = useQuiz();
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // derive incorrect and skipped counts
-  const incorrect = userAnswers.filter(a => !a.isCorrect).length;
-  const skipped = totalQuestions - userAnswers.length;
-  const correct = correctCount;
+  useEffect(() => {
+    const contextHasData = userAnswers?.length > 0 || score > 0;
+    if (!contextHasData) {
+      const fetchResults = async () => {
+        setLoading(true);
+        try {
+          const response = await quizService.getQuizResults(quizId);
+          setResults(response.data);
+        } catch(error) {
+          toast.error('Failed to load results');
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchResults();
+    }
+  }, [quizId]);
 
-  // score message based on percentage
+  if (loading) {
+    return (
+      <div className="quiz-results quiz-results--centered">
+        <div className="spinner-loader-circle" />
+        <p>Loading results...</p>
+      </div>
+    );
+  }
+
+  // derive display data from context (fresh session) or fetched results (direct nav)
+  const contextHasData = userAnswers?.length > 0 || score > 0;
+
+  const displayScore = contextHasData 
+    ? score 
+    : results?.quiz?.score;
+
+  const displayTotal = contextHasData 
+    ? totalQuestions 
+    : results?.quiz?.totalQuestions;
+
+  const displayTitle = contextHasData 
+    ? quiz?.title 
+    : results?.quiz?.title;
+
+  const displayUserAnswers = contextHasData 
+    ? userAnswers 
+    : results?.results?.map(r => ({
+        questionIndex: r.questionIndex,
+        selectedAnswer: r.selectedAnswer,
+        isCorrect: r.isCorrect
+      }));
+
+  const displayQuestions = contextHasData 
+    ? quiz?.questions 
+    : results?.results?.map(r => ({
+        _id: r.questionIndex,
+        question: r.question,
+        options: r.options,
+        correctAnswer: r.correctAnswer,
+        explanation: r.explanation
+      }));
+
+  const correct = displayUserAnswers?.filter(a => a.isCorrect).length ?? 0;
+  const incorrect = displayUserAnswers?.filter(a => !a.isCorrect && a.selectedAnswer).length ?? 0;
+  const skipped = (displayTotal ?? 0) - (displayUserAnswers?.length ?? 0);
+
   const getScoreMessage = () => {
-    if (score >= 80) return 'Excellent work!';
-    if (score >= 60) return 'Good effort!';
-    if (score >= 40) return 'Keep practicing!';
-    return 'Don\'t give up!';
+    if (displayScore >= 80) return 'Excellent work!';
+    if (displayScore >= 60) return 'Good effort!';
+    if (displayScore >= 40) return 'Keep practicing!';
+    return "Don't give up!";
   };
 
-  // score color class
   const getScoreClass = () => {
-    if (score >= 80) return 'quiz-results__score-value--high';
-    if (score >= 60) return 'quiz-results__score-value--mid';
+    if (displayScore >= 80) return 'quiz-results__score-value--high';
+    if (displayScore >= 60) return 'quiz-results__score-value--mid';
     return 'quiz-results__score-value--low';
   };
 
-  const handleRetry = () => {
-    loadQuiz(quizId);
-    navigate(`/quizzes/${quizId}`);
-  };
+  // guard — nothing to show yet
+  if (!displayQuestions?.length) {
+    return (
+      <div className="quiz-results quiz-results--centered">
+        <p>No results found.</p>
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
+    );
+  }
 
   return (
     <div className="quiz-results">
 
       {/* HEADER */}
       <div className="quiz-results__header">
-        <button onClick={() => navigate(-1)}>
-          Back to sets
-        </button>
-        <h2 className="quiz-results__title">{quiz?.title}</h2>
+        <button onClick={() => navigate(-1)}>Back to sets</button>
+        <h2 className="quiz-results__title">{displayTitle}</h2>
       </div>
 
       {/* SCORE SUMMARY CARD */}
@@ -52,14 +116,14 @@ const QuizResultPage = () => {
         </div>
         <p className="quiz-results__score-label">YOUR SCORE</p>
         <h1 className={`quiz-results__score-value ${getScoreClass()}`}>
-          {score}%
+          {displayScore}%
         </h1>
         <p className="quiz-results__score-message">{getScoreMessage()}</p>
 
         <div className="quiz-results__stats-container">
           <div className="quiz-results__stat-pill quiz-results__stat-pill--neutral">
             <Target size={16} />
-            <span>{totalQuestions} Total</span>
+            <span>{displayTotal} Total</span>
           </div>
           <div className="quiz-results__stat-pill quiz-results__stat-pill--success">
             <CheckCircle2 size={16} />
@@ -76,12 +140,15 @@ const QuizResultPage = () => {
           )}
         </div>
 
-        <button className="quiz-results__retry-btn" onClick={handleRetry}>
+       {/*  <button
+          className="quiz-results__retry-btn"
+          onClick={() => navigate(`/quizzes/${quizId}`)}
+        >
           <RotateCcw size={16} /> Retry Quiz
-        </button>
+        </button> */}
       </div>
 
-      {/* DETAILED REVIEW SECTION */}
+      {/* DETAILED REVIEW */}
       <div className="quiz-results__review-section">
         <div className="quiz-results__review-header">
           <BookOpen size={20} />
@@ -89,15 +156,14 @@ const QuizResultPage = () => {
         </div>
 
         <div className="quiz-results__review-list">
-          {quiz?.questions?.map((question, index) => {
-            // find the user's answer for this question by index
-            const userAnswer = userAnswers.find(a => a.questionIndex === index);
+          {displayQuestions.map((question, index) => {
+            const userAnswer = displayUserAnswers?.find(a => a.questionIndex === index);
             const selectedAnswer = userAnswer?.selectedAnswer ?? null;
             const isCorrect = userAnswer?.isCorrect ?? false;
-            const wasSkipped = !userAnswer;
+            const wasSkipped = !userAnswer || !selectedAnswer;
 
             return (
-              <div key={question._id} className="quiz-results__review-card">
+              <div key={question._id ?? index} className="quiz-results__review-card">
 
                 {/* Question Header */}
                 <div className="quiz-results__question-header">
@@ -128,8 +194,7 @@ const QuizResultPage = () => {
                 <div className="quiz-results__options">
                   {question.options.map((option, i) => {
                     const isCorrectOption = option === question.correctAnswer;
-                    const isUserAnswer = option === selectedAnswer;
-                    const isWrongUserAnswer = isUserAnswer && !isCorrect;
+                    const isWrongUserAnswer = option === selectedAnswer && !isCorrect;
 
                     return (
                       <div
@@ -147,9 +212,9 @@ const QuizResultPage = () => {
                           </div>
                         )}
                         {isWrongUserAnswer && (
-                          <div className="quiz-results__option-badge quiz-results__option-badge--wrong">
+                          <div className={`quiz-results__option-badge quiz-results__option-badge--wrong ${isWrongUserAnswer ? 'wrong-option': ''}`}>
                             <XCircle size={14} />
-                            <span className={`${isWrongUserAnswer && 'quiz-result__wrong-option'}`}>Your answer</span>
+                            <span className={`${isWrongUserAnswer ? 'wrong-option': ''}`}>Your answer</span>
                           </div>
                         )}
                       </div>

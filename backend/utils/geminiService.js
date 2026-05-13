@@ -52,7 +52,7 @@ async function generateContentWithRetry(model, prompt, maxRetries = 3) {
 /**
  * Generate Flashcards
  */
-export const generateFlashcards = async (text, count = 10) => {
+export const generateFlashcards = async (text, count = 10, /* difficulty */) => {
     const cleanText = text.substring(0, 15000);
     
     const prompt = `Generate exactly ${count} flashcards from the following text. 
@@ -64,7 +64,7 @@ export const generateFlashcards = async (text, count = 10) => {
     - "difficulty": "easy", "medium", or "hard".
     
     Text: ${cleanText}`;
-
+/* "easy", "medium", or "hard" */
     try {
         const result = await model.generateContent({
             contents: [{ role: "user", parts: [{ text: prompt }] }],

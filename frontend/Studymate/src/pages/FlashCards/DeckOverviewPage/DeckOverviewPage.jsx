@@ -12,7 +12,7 @@ const DeckOverviewPage = () => {
   const {id: documentId} = useParams();
   const {generateDeck , isLoading} = useStudy()
   const [difficulty, setDifficulty] = useState('medium')
-  const [count, setCount] = useState('10');
+  const [count, setCount] = useState(10);
   const [isGenerating, setIsGenerating] = useState(false);
   const [deck , setDeck] = useState([]); 
   const [deckLoading, setDeckLoading] = useState(false);
