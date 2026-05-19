@@ -1,0 +1,258 @@
+@use '../../components/styles/abstracts/variables' as *;
+.profile-settings {
+  max-width: 160rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 2rem 0rem 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: $color-grey-dark;
+  max-height: calc(100vh - 6rem);
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-grey-light;
+    border-radius: 10px;
+
+    &:hover {
+      background: $color-grey-medium;
+    }
+  }
+
+  &__main-title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: $color-grey-dark;
+    margin-bottom: 2rem;
+  }
+}
+
+.settings-card {
+  background-color: #ffffff;
+  border: $main-border;
+  border-radius: 1.2rem;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+  &__header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.4rem;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 1.2rem 0;
+    color: $color-grey-dark;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 3rem;
+  }
+}
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: $color_white;
+  color: $color-Primary;
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.profile-image-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: $main-border;
+
+  &__avatar {
+    position: relative;
+    width: 7.2rem;
+    height: 7.2rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $color-Primary, $color-Accent);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  &__edit-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: $main-border;
+    color: $primary-text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $color-grey-bg;
+      color: $color-Primary;
+    }
+  }
+
+  &__info {
+    h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: $color-grey-dark;
+      margin: 0 0 0.4rem 0;
+    }
+    p {
+      font-size: 1.3rem;
+      color: $color-grey-medium;
+      margin: 0;
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  label {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: $primary-text;
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 1.6rem;
+    color: $color-grey-medium;
+    transition: color 0.2s ease;
+    pointer-events: none;
+  }
+
+  input, .select-input {
+    width: 100%;
+    padding: 1.2rem 4.4rem 1.2rem 4.4rem;
+    font-size: 1.5rem;
+    color: $color-grey-dark;
+    background-color: #ffffff;
+    border: $main-border;
+    border-radius: 0.8rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $color-Primary;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      
+      & ~ .input-icon {
+        color: $color-Primary;
+      }
+    }
+  }
+
+  .password-toggle-btn {
+    position: absolute;
+    right: 1.2rem;
+    background: transparent;
+    border: none;
+    color: $color-grey-medium;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $color-grey-dark;
+      background-color: $color-grey-bg;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .select-input {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.6rem center;
+    background-size: 1.6rem;
+    padding-right: 4rem;
+  }
+}
+
+.btn-save {
+  background-color: $color-Primary;
+  color: #ffffff;
+  border: none;
+  padding: 1.2rem 2.4rem;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: $color-Accent;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(124, 58, 237, 0.2);
+  }
+
+  &:disabled,
+  &--disabled {
+    background-color: $color-grey-light;
+    color: $color-grey-medium;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}

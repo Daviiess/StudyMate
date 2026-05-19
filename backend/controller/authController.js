@@ -152,11 +152,12 @@ export const getProfile = async(req, res , next) => {
 }
 export const updateProfile = async(req, res, next) => {
    try{
-    const {username , email , profileImage} = req.body;
+    const {username , email , profileImage, studyGoal} = req.body;
     const user = await User.findById(req.user._id);
     if(username) user.username = username;
     if(email) user.email = email;
     if(profileImage) user.profileImage = profileImage;
+    if(studyGoal) user.studyGoal = studyGoal;
     await user.save();
     res.status(200).json({
         success: true,
@@ -164,7 +165,8 @@ export const updateProfile = async(req, res, next) => {
             id: user._id,
             username: user.username,
             email: user.email,
-            profileImage: user.profileImage
+            profileImage: user.profileImage,
+            studyGoal: user.studyGoal
         },
         message: "Profile updated successfully"
     });
@@ -199,6 +201,12 @@ export const changePassword = async(req, res, next ) => {
             });
         };
         user.password = newPassword;
+        res.status(200)
+        .json({
+            success: true,
+            message: 'password successfully changed',
+            statusCode: 200
+        });
         await user.save();
     }catch(error){
         next(error)

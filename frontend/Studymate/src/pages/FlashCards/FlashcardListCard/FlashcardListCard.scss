@@ -1,8 +1,8 @@
 @use '../../../components/styles/abstracts/variables' as *;
 
 .study-card {
- /*  border: 2px solid rgba($color-Primary,.6);  */
- border: $main-border;
+ 
+  border: $main-border;
   border-radius: 1.6rem;
   padding: 2rem;
   max-width: 36rem; 

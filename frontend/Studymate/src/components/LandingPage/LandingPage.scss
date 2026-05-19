@@ -1,0 +1,515 @@
+@use '../../components/styles/abstracts/variables' as *;
+
+
+.landing-page {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  background-color: $color-grey-bg;
+
+  background-image: radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.03), transparent 25%),
+                    radial-gradient(circle at 85% 30%, rgba(91, 33, 182, 0.03), transparent 25%);
+  color: $primary-text;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+
+  &__nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 3rem;
+
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+
+    @media (max-width: 768px) {
+      padding: 0 1.5rem;
+    }
+
+    &-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 160rem;
+      margin: 0 auto;
+      padding: 1rem 0; // Tighter padding
+    }
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    group: hover; // Setup for icon hover
+
+    &-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, $color-Primary, $color-Accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba($color-Primary, 0.2);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      i {
+        color: #fff;
+        font-size: 22px;
+      }
+    }
+
+    &:hover &-icon {
+      transform: scale(1.05) rotate(-5deg);
+    }
+
+    &-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: $color-grey-dark;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  &__nav-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    @media (max-width: 480px) {
+      .btn-ghost { display: none; }
+    }
+  }
+
+  // ─── BUTTONS (Premium Polish) ─────────────────────────
+  .btn-ghost {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: $color-grey-dark;
+    font-family: inherit;
+    transition: all 0.2s ease;
+
+    &:hover { 
+      background: rgba($color-grey-dark, 0.05); 
+      color: $color-Primary;
+    }
+  }
+
+  .btn-primary {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    background: $color-Primary;
+    color: #fff;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba($color-Primary, 0.25);
+    transition: all 0.2s ease;
+
+    &:hover { 
+      background: $color-Accent; 
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba($color-Accent, 0.3);
+    }
+  }
+
+  .btn-lg {
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    &--primary {
+      background: linear-gradient(135deg, $color-Primary, $color-Accent);
+      color: #fff;
+      border: none;
+      box-shadow: 0 8px 20px rgba($color-Primary, 0.3);
+
+      &:hover { 
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba($color-Primary, 0.4);
+      }
+      
+      i { transition: transform 0.2s; }
+      &:hover i { transform: translateX(4px); }
+    }
+
+    &--outline {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      color: $color-grey-dark;
+      border: 1px solid rgba($color-grey-dark, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+
+      &:hover { 
+        background: #fff; 
+        border-color: rgba($color-grey-dark, 0.2);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .btn-white {
+    padding: 16px 36px;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #fff;
+    color: $color-Accent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+
+    &:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // ─── HERO (Gradient Text & Floating Elements) ─────────
+  &__hero {
+    text-align: center;
+    padding: 10rem 2rem 8rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+
+    @media (max-width: 1024px) { padding: 8rem 2rem 5rem; }
+    @media (max-width: 600px) { padding: 5rem 1.25rem 3.5rem; }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba($color_white, 0.8);
+    backdrop-filter: blur(4px);
+    color: $color-Accent;
+    border: 1px solid rgba($color-Primary, 0.2);
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 20px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 10px rgba($color-Primary, 0.05);
+
+    i { font-size: 16px; color: $color-Primary; }
+  }
+
+  &__title {
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 800;
+    color: $color-grey-dark;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 1.8rem;
+
+    span { 
+      // Gradient Text Effect
+      background: linear-gradient(135deg, $color-Primary, $color-Accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.25rem;
+    color: $color-grey-medium;
+    line-height: 1.6;
+    max-width: 640px;
+    margin: 0 auto 3.5rem;
+  }
+
+  &__cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__stats {
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    padding: 4.5rem 0 0;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba($color-Primary, 0.1);
+    margin-top: 5rem;
+    background: radial-gradient(ellipse at top, rgba($color-Primary, 0.03), transparent 70%);
+
+    @media (max-width: 600px) { gap: 2.5rem; margin-top: 3rem; }
+  }
+
+  &__stat {
+    text-align: center;
+
+    &-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: $color-grey-dark;
+      letter-spacing: -1px;
+    }
+
+    &-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: $color-grey-medium;
+      margin-top: 4px;
+    }
+  }
+
+  &__divider { display: none; } // Replaced by the border-top on stats
+
+  // ─── FEATURES (Bento Grid Inspired) ───────────────────
+  &__features {
+    padding: 8rem 2rem;
+    max-width: $max-content;
+    margin: 0 auto;
+
+    @media (max-width: 600px) { padding: 4.5rem 1.25rem; }
+  }
+
+  &__section-label {
+    text-align: center;
+    font-size: 14px;
+    color: $color-Primary;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  &__section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: $color-grey-dark;
+    letter-spacing: -0.5px;
+    margin-bottom: 1rem;
+  }
+
+  &__section-sub {
+    text-align: center;
+    color: $color-grey-medium;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 4rem;
+  }
+
+  &__feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  &__feature-card {
+    background: #fff;
+    border: 1px solid rgba($border-color, 0.5);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+
+    // Subtle hover glow effect
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, $color-Primary, $color-Accent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.08);
+      border-color: rgba($color-Primary, 0.2);
+      
+      &::before { opacity: 1; }
+      
+      .landing-page__feat-icon {
+        background: $color-Primary;
+        i { color: #fff; }
+      }
+    }
+  }
+
+  &__feat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: $color_white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+
+    i {
+      font-size: 26px;
+      color: $color-Primary;
+      transition: color 0.3s ease;
+    }
+  }
+
+  &__feat-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: $color-grey-dark;
+    margin-bottom: 10px;
+  }
+
+  &__feat-desc {
+    font-size: 15px;
+    color: $color-grey-medium;
+    line-height: 1.6;
+  }
+
+  // ─── HOW IT WORKS (Connected Flow) ────────────────────
+  &__how {
+    background: linear-gradient(to bottom, #fff, $color-grey-bg);
+    padding: 8rem 2rem;
+
+    @media (max-width: 600px) { padding: 4.5rem 1.25rem; }
+  }
+
+  &__steps {
+    display: flex;
+    max-width: $max-content;
+    margin: 4rem auto 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  &__step {
+    flex: 1;
+    min-width: 240px;
+    text-align: left; // Left-aligned looks more premium
+    padding: 2.5rem;
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid rgba($border-color, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    position: relative;
+    transition: transform 0.2s ease;
+
+    &:hover { transform: translateY(-2px); }
+
+    &-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: $color-Primary;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba($color-Primary, 0.3);
+    }
+
+    &-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: $color-grey-dark;
+      margin-bottom: 10px;
+    }
+
+    &-desc {
+      font-size: 15px;
+      color: $color-grey-medium;
+      line-height: 1.6;
+    }
+  }
+
+  // ─── CTA BANNER ────────────────────────────────────────
+  &__cta-banner {
+    padding: 8rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    // Rich gradient background
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, $color-Accent, $color-Primary);
+      z-index: 1;
+    }
+    
+    // Noise/Texture overlay for premium feel
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      z-index: 2;
+    }
+
+    &-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 3; // Keep text above background layers
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.15rem;
+      margin-bottom: 3rem;
+      line-height: 1.6;
+    }
+  }
+
+  // ─── FOOTER ────────────────────────────────────────────
+  &__footer {
+    background: #0f172a; // Deep slate
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    padding: 3rem 2rem;
+    font-size: 14px;
+    font-weight: 500;
+
+    span { 
+      color: #fff; 
+      font-weight: 700;
+    }
+  }
+}

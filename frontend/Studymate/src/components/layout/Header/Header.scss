@@ -9,6 +9,7 @@
   border: $main-border;
   background-color: #fff;
   border-left: none;
+  position: relative;
 
   &__bell{
    
@@ -22,17 +23,12 @@
         background-color: #e7e5e5;
     }
 
-    .bell-icon{
+    .streak-icon{
     color: #4b5563;
+    
     }
     .notification-dot{
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: $color-Primary;
-        right: 28%;
-        top: 19%;
+     font-size: 1.3rem;
     }
   }
 
@@ -73,5 +69,18 @@
         font-weight: 500;
 
     }
+  }
+  .menu-icon{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+    display: none;
+
+  }
+  @media screen and (min-width: 768px){
+
   }
 }

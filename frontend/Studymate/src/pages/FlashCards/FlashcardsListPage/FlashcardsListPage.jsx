@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react'
 import FlashcardListCard from '../FlashcardListCard/FlashcardListCard';
 import './FlashcardsListPage.scss';
 import flashcardService from '../../../services/flashcardService';
-import { useStudy } from '../../../context/StudyContext';
 import Button from '../../../components/common/Button/Button';
 import { useNavigate } from 'react-router';
+import Spinner from '../../../components/common/Spinner/Spinner';
+import { BookOpenCheck } from 'lucide-react';
 const FlashcardsListPage = () => {
   const [cardList , setCardList] = useState([]);
-  const [loading , setLoading] = useState(false);
+  const [loading , setLoading] = useState(true);
 const navigate = useNavigate()
 const fetchAllCards = async()=> {
   setLoading(true);
@@ -19,15 +20,11 @@ const fetchAllCards = async()=> {
     setLoading(false)
   }catch(error){
     console.error('Failed to load flashcards list');
+  }finally{
+    setLoading(false);
   }
 }
-function EmptyFlashcard(){
-  if(!cardList || cardList?.length){
-    <div>
-      No flashcards generated
-    </div>
-  }
-}
+
 useEffect(()=> {
 fetchAllCards();
 },[])
@@ -40,24 +37,27 @@ console.log('all cards: ',cardList);
         Track your progress, review difficult concepts,
          and build your knowledge base</p>
       </div>
-    { (cardList.length === 0 || !cardList) ?
-      <div className='flashcardList-page__empty-page'> 
-       <h2>No flashcards generated</h2>
-       <p>Click the link below to navigate to document tab</p>
-       <Button onClick={() => {
-        navigate('/documents')
-       }}>Go to documents</Button>
+        {loading ? (
+      <Spinner/>
+        
+    ) : (!cardList || cardList.length === 0) ? (
+      <div className='flashcardList-page__empty-page'>
+        <div className='empty-documents-container__icon-wrapper'>
+        <BookOpenCheck color='#fff'/>
         </div>
-        : <div className='flashcardList-page__grid-holder'>
-      {cardList?.map((card, index) => {
-      return(
-        <div key={index}>
-        <FlashcardListCard card = {card} index = {index} />
-        </div>
-      )
-        })}
-      </div> 
-        }
+        <h2>No flashcards generated</h2>
+        <p>Click the link below to navigate to document tab</p>
+        <Button onClick={() => navigate('/documents')}>Go to documents</Button>
+      </div>
+    ) : (
+      <div className='flashcardList-page__grid-holder'>
+        {cardList.map((card, index) => (
+          <div key={index}>
+            <FlashcardListCard card={card} index={index} />
+          </div>
+        ))}
+      </div>
+    )}
  
     </div>
   )

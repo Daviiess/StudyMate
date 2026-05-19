@@ -65,7 +65,7 @@ if (!dashboardData || !dashboardData?.overview) {
     }
 
   ];
-
+/* /quizzes/:quizId */
 const activities = [
   ...(dashboardData?.recentActivity?.documents || []).map((doc) => ({
     id: doc._id,
@@ -77,8 +77,8 @@ const activities = [
   ...(dashboardData?.recentActivity?.quizzes|| []).map((quiz) => ({
     id: quiz._id,
     description: quiz.title,
-    timestamp: quiz.completedAt,
-    link: `/quiz/${quiz._id}`,
+    timestamp: quiz.createdAt,
+    link: `/quizzes/${quiz._id}`,
     type: 'quiz'
   }))
 ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
@@ -98,8 +98,10 @@ const activities = [
         {stats.map((stat) => {
           return(
             <div className='dashboard__card' key={stat.label}>
-              <span className='dashboard__card--text'>{stat.label}</span>
-              <span className='dashboard__card--value'>{stat.value}</span>
+              <div className='dashboard__card--value-holder'>
+                <span className='dashboard__card--text'>{stat.label}</span>
+                <span className='dashboard__card--value'>{stat.value}</span>
+              </div>
 
              <div className={`dashboard__card--icon-wrapper dashboard__card--icon-wrapper--${stat.content}`}>
                <stat.icon className='dashboard__card--icon'/>
@@ -137,9 +139,11 @@ const activities = [
                 <div className='dashboard__activity-info'>
                   <div>
                   <span className={`dashboard-dot dashboard-dot--${activity.type}`} ></span>
-                  <span className='dashboard__activity-info--text'> {activity.type === 'document' ? 'Accessed document: ' : 'Accessed quiz: '}  <span className='u-color-grey'>{activity.description}</span> </span>
+                  <span className='dashboard__activity-info--text'> {activity.type === 'document' ? 'Accessed document: ' : 'Accessed quiz: '}  <span className='u-color-grey info-text'>{activity.description}</span> </span>
                   <span className='dashboard__activity-info--date'>
-                    {new Date(activity.timestamp).toLocaleString('en-GB', {
+                    created :   
+                     {
+                     new Date(`${activity.timestamp}`).toLocaleString('en-GB', {
                     day: '2-digit', month: '2-digit', year: 'numeric',
                     hour: '2-digit', minute: '2-digit'
                       })}

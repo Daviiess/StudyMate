@@ -1,7 +1,7 @@
 import React from 'react'
 import './Sidebar.scss';
 import logo from '../../../assets/logo1.png';
-import { LayoutDashboard, FileText, BookOpen, User, LogOut } from 'lucide-react';
+import { LayoutDashboard, FileText, BookOpen, User, LogOut, BrainCircuitIcon, Brain } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../../context/AuthContext';
 import { NavLink } from 'react-router-dom';
@@ -23,11 +23,17 @@ const Sidebar = () => {
   return (
     <div className='sidebar'>
         <div className='sidebar__header'>
-           <div className='sidebar__header--img-holder'>
-            <img src={logo} alt="" className='sidebar__img' />
-          </div>
-          <span className='sidebar__span'>Ai powered study companion</span> 
+      <div className='sidebar__logo-group'>
+        <div className='sidebar__logo-icon'>
+          {/* Increased size, white color, thicker stroke */}
+          <Brain size={24} color="#ffffff" strokeWidth={2.5} />
         </div>
+        <div className='sidebar__logo-text'>
+          <span className='sidebar__title'>StudyMate</span>
+          <span className='sidebar__badge'>AI Tutor</span>
+        </div>
+      </div>
+    </div>
       <ul className='sidebar__holder'>
         {navLinks.map((link) => {
            return(

@@ -1,19 +1,20 @@
 import React from 'react'
 import './Header.scss'
 import { useAuth } from '../../../context/AuthContext'
-import { Bell,User, Menu  } from 'lucide-react'
-const Header = () => {
+import { Bell,User, Menu, Flame  } from 'lucide-react'
+const Header = ({isSidebarOpen , toggleSidebar}) => {
     const {user} = useAuth();
     const userProfile = {
         email: user?.email || "user@gmail.com",
         username: user?.username || "user"
     }
-    console.log(user)
+    
   return (
     <div className='header'>
+        <Menu onClick={toggleSidebar} className = 'menu-icon' />
         <div className='header__bell'>
-            <Bell className='bell-icon' strokeWidth={2}/>
-            <span className='notification-dot'></span>
+            <Flame className='streak-icon' strokeWidth={2} color ='#FF7A00' fill='#FF7A00'/>
+            <span className='notification-dot'>{user?.currentStreak}</span>
         </div>
         <div className="header__divider"></div>
         {/* User Profile */}
