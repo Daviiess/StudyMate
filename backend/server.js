@@ -30,6 +30,10 @@ app.use(cors({
   credentials: true
 }));
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 
 
 //Routes
