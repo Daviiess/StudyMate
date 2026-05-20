@@ -26,10 +26,13 @@ connectDB();
 
 //using cors
 app.use(cors({
-    origin: '*',
+    origin: [
+        'http://localhost:5173', // Your local Vite frontend
+        // 'https://studymate.vercel.app' <-- We will uncomment and update this after you deploy Vercel!
+    ],
     methods: ['GET', 'POST', 'PUT' , 'DELETE', 'PATCH'],
-    credentials: true // to allow authorization headers
-}))
+    credentials: true 
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
