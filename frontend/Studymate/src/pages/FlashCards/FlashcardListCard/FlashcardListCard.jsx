@@ -1,6 +1,6 @@
 import React from 'react';
 import { BookOpen, TrendingUp, Sparkles, StarsIcon, StarIcon } from 'lucide-react';
-import './flashcardListCard.scss';
+import './FlashcardListCard.scss';
 import { useNavigate } from 'react-router';
 import { formatTimeAgo, truncateTitle } from '../../../utils/util';
 
