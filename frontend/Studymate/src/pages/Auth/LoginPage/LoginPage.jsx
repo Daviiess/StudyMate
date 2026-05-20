@@ -86,7 +86,7 @@ const LoginPage = () => {
                   e.stopPropagation();
                   e.preventDefault();
                   setShowPassword(prev => !prev);
-                  tabIndex = "-1"
+                 
                 }} className = 'login-password-show'>
              {showPassword ?  <EyeOff size = {18}/> : <Eye size = {18}/>  }
               </button>

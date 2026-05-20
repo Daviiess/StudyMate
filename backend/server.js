@@ -27,8 +27,7 @@ connectDB();
 //using cors
 app.use(cors({
     origin: [
-        'http://localhost:5173', // Your local Vite frontend
-        // 'https://studymate.vercel.app' <-- We will uncomment and update this after you deploy Vercel!
+            https://study-mate-orcin.vercel.app/
     ],
     methods: ['GET', 'POST', 'PUT' , 'DELETE', 'PATCH'],
     credentials: true 
