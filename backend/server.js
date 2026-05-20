@@ -26,15 +26,9 @@ connectDB();
 
 //using cors
 app.use(cors({
-    origin: [
-            https://study-mate-orcin.vercel.app/
-    ],
-    methods: ['GET', 'POST', 'PUT' , 'DELETE', 'PATCH'],
-    credentials: true 
+  origin: "*",
+  credentials: true
 }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 
 
