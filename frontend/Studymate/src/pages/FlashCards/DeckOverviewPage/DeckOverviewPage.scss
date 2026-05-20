@@ -230,6 +230,127 @@
   }
 }
 
+@media (max-width: 760px) {
+    .deck-overview {
+        height: auto;          // ✅ no fixed height on mobile
+        min-height: calc(100vh - 18rem);
+        overflow-x: hidden;
+        overflow-y: visible;
+
+        // hide decorative blur circle on mobile
+        &::before {
+            display: none;
+        }
+
+        &__header {
+            padding: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+
+            &--text {
+                font-size: 1.5rem;
+                padding: 0.8rem;
+            }
+        }
+
+        &__grid-holder {
+            grid-template-columns: 1fr; // ✅ single column on mobile
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        &__loading {
+            position: relative; // ✅ no absolute on mobile
+            height: 20rem;
+        }
+    }
+
+    .empty-flashcard {
+        position: relative; // ✅ no absolute positioning on mobile
+        left: 0;
+        width: 100%;
+        height: auto;
+        padding: 4rem 2rem;
+        text-align: center;
+
+        & h2 {
+            font-size: 1.6rem;
+        }
+
+        & p {
+            font-size: 1.1rem;
+        }
+    }
+
+    .empty-flashcard-container {
+        width: 100%;
+        min-height: 40rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .options-modal-overlay {
+        align-items: flex-end; 
+        .options-modal {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 1.5rem 1.5rem 0 0; 
+            padding: 2rem 1.5rem;
+
+            &__header h3 {
+                font-size: 1.6rem;
+            }
+
+            .flashcard-options {
+                &__group {
+                    label {
+                        font-size: 1.3rem;
+                    }
+
+                    select, input {
+                        font-size: 1.4rem;
+                        padding: 1rem;
+                    }
+                }
+            }
+
+            &__footer {
+                margin-top: 1.5rem;
+
+                button {
+                    width: 100%; 
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 650px) {
+    .deck-overview {
+        &__header {
+            padding: 1rem;
+            
+            &--text {
+                font-size: 1.3rem;
+            }
+        }
+
+        &__grid-holder {
+            padding: 1rem;
+            gap: 1rem;
+        }
+    }
+
+    .empty-flashcard {
+        padding: 3rem 1.5rem;
+
+        & h2 {
+            font-size: 1.4rem;
+        }
+    }
+}
 
 
 

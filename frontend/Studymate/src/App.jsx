@@ -15,6 +15,7 @@ import ProfilePage from './pages/Profile/ProfilePage';
 import { useAuth } from './context/AuthContext';
 import Spinner from './components/common/Spinner/Spinner.jsx';
 import DeckOverviewPage from './pages/FlashCards/DeckOverviewPage/DeckOverviewPage.jsx';
+import QuizzesList from './pages/Quizzes/QuizList/QuizzesList.jsx';
 import LandingPage from './components/LandingPage/LandingPage.jsx';
 const App = () => {
 const {loading , isAuthenticated} = useAuth();
@@ -47,6 +48,7 @@ const {loading , isAuthenticated} = useAuth();
           <Route path='/flashcards' element = {<FlashcardsListPage/>}/>
          <Route path='/documents/:id/overview' element={<DeckOverviewPage />}/> 
          <Route path='/documents/:documentId/flashcards/:setId' element={<FlashcardsPage/>}/>
+         <Route path = '/documents/quizzesList' element = {<QuizzesList/>}/>
           <Route path='/quizzes/:quizId' element = {<QuizTakePage/>}/>
           <Route path='/quizzes/:quizId/results' element = {<QuizResultPage/>}/>
           <Route path='/profile' element = {<ProfilePage/>}/>

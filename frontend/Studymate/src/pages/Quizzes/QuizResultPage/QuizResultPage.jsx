@@ -95,7 +95,6 @@ const QuizResultPage = () => {
     return (
       <div className="quiz-results quiz-results--centered">
         <p>No results found.</p>
-        <button onClick={() => navigate(-1)}>Go Back</button>
       </div>
     );
   }
@@ -105,12 +104,11 @@ const QuizResultPage = () => {
 
       {/* HEADER */}
       <div className="quiz-results__header">
-        <button onClick={() => navigate(-1)}>Go Back </button>
         <h2 className="quiz-results__title">{displayTitle}</h2>
       </div>
 
       {/* SCORE SUMMARY CARD */}
-      <div className="quiz-results__score-card">
+      <div className="quiz-results__score-card"> 
         <div className="quiz-results__trophy-wrapper">
           <Trophy size={32} className="quiz-results__trophy-icon" />
         </div>

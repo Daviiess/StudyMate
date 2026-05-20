@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-
-import { 
-  ExternalLink, 
-  ChevronLeft, 
-  ChevronRight, 
-  ZoomIn, 
-  ZoomOut 
-} from 'lucide-react';
-
+import { ExternalLink, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import './DocumentViewer.scss';
@@ -22,16 +14,46 @@ const DocumentViewer = ({ pdfUrl, aiConcept }) => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
+  const [containerWidth, setContainerWidth] = useState(null); 
+  const containerRef = useRef(null); 
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
     setPageNumber(1);
   };
+
   
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.clientWidth);
+      }
+    };
+
+    updateWidth(); 
+
+    const resizeObserver = new ResizeObserver(updateWidth);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  
+  const isMobile = window.innerWidth <= 760;
+  const PDF_PAGE_WIDTH = 612; 
+
+  const fitScale = containerWidth 
+    ? (containerWidth - 32) / PDF_PAGE_WIDTH  
+    : 1.0;
+
+  
+  const effectiveScale = isMobile ? fitScale : scale;
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      
       if (e.key === 'ArrowLeft') {
         setPageNumber(prev => (prev > 1 ? prev - 1 : prev));
       } else if (e.key === 'ArrowRight') {
@@ -53,31 +75,28 @@ const DocumentViewer = ({ pdfUrl, aiConcept }) => {
 
       <div className='doc-viewer__holder'>
         <div className="doc-viewer__toolbar">
-         
           <div className="doc-viewer__pill">
-            <button 
-              disabled={pageNumber <= 1} 
+            <button
+              disabled={pageNumber <= 1}
               onClick={() => setPageNumber(prev => prev - 1)}
               className='doc-viewer__icon-btn'
             >
               <ChevronLeft size={20} />
             </button>
-            
             <div className="doc-viewer__page-selector">
-              <input 
-                type="number" 
+              <input
+                type="number"
                 value={pageNumber}
                 onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (val >= 1 && val <= numPages) setPageNumber(val);
+                  const val = Number(e.target.value);
+                  if (val >= 1 && val <= numPages) setPageNumber(val);
                 }}
                 className="doc-viewer__page-input"
               />
               <span className="doc-viewer__page-total">of {numPages || '--'}</span>
             </div>
-
-            <button 
-              disabled={pageNumber >= numPages} 
+            <button
+              disabled={pageNumber >= numPages}
               onClick={() => setPageNumber(prev => prev + 1)}
               className='doc-viewer__icon-btn'
             >
@@ -85,41 +104,42 @@ const DocumentViewer = ({ pdfUrl, aiConcept }) => {
             </button>
           </div>
 
-          {/* Zoom Group */}
-          <div className="doc-viewer__pill">
-            <button 
-              onClick={() => setScale(prev => Math.max(prev - 0.25, 0.5))}
-              className="doc-viewer__icon-btn"
-              disabled={scale <= 0.5} 
-            >
-              <ZoomOut size={18} />
-            </button>
-            
-            <span className="doc-viewer__zoom-text">{Math.round(scale * 100)}%</span>
-            
-            <button 
-              onClick={() => setScale(prev => Math.min(prev + 0.25, 2.0))} 
-              className="doc-viewer__icon-btn"
-              disabled={scale >= 2.0} 
-            >
-              <ZoomIn size={18} />
-            </button>
-          </div>
+          
+          {!isMobile && (
+            <div className="doc-viewer__pill">
+              <button
+                onClick={() => setScale(prev => Math.max(prev - 0.25, 0.5))}
+                className="doc-viewer__icon-btn"
+                disabled={scale <= 0.5}
+              >
+                <ZoomOut size={18} />
+              </button>
+              <span className="doc-viewer__zoom-text">{Math.round(scale * 100)}%</span>
+              <button
+                onClick={() => setScale(prev => Math.min(prev + 0.25, 2.0))}
+                className="doc-viewer__icon-btn"
+                disabled={scale >= 2.0}
+              >
+                <ZoomIn size={18} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="doc-viewer__canvas-container">
+     
+      <div className="doc-viewer__canvas-container" ref={containerRef}>
         <Document
-          file={pdfUrl} 
+          file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
           loading={<div className="doc-viewer__loading">Loading PDF...</div>}
           error={<div className="doc-viewer__error">Failed to load PDF.</div>}
         >
-          <Page 
-            pageNumber={pageNumber} 
-            scale={scale} 
-            renderTextLayer={true} 
-            renderAnnotationLayer={true} 
+          <Page
+            pageNumber={pageNumber}
+            scale={effectiveScale}  
+            renderTextLayer={true}
+            renderAnnotationLayer={true}
             className="doc-viewer__pdf-page"
           />
         </Document>

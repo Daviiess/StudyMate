@@ -5,14 +5,14 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo1.png';
 import toast from 'react-hot-toast';
-import {Mail, Lock, ArrowRight} from 'lucide-react';
+import {Mail, Lock, ArrowRight, Eye, EyeOff }  from 'lucide-react';
 const LoginPage = () => {
   const [email , setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
-   
+  const [showPassword, setShowPassword] = useState(false); 
   useEffect(() => {
        if(error){
         const timer = setTimeout(() => {
@@ -68,19 +68,28 @@ const LoginPage = () => {
              onBlur={() => setFocusedField(null)}
              onChange={(e) => setEmail(e.target.value.trim())} 
                />
+             
              </div>
         </div>
         <div className='login__input-holder login__input-holder--password'>
             <label className='login__label'>PASSWORD</label>
               <div className='login__input-wrapper'>
             <Lock className={`${focusedField === 'password' ? 'focus' : ''}`}/>
-            <input type="password"
+            <input type={`${showPassword ? 'text': 'password'}`}
              placeholder='******'
              className='login__input'
              onFocus={() => setFocusedField('password')}
              onBlur={() => setFocusedField(null)}
              onChange={(e) => setPassword(e.target.value.trim())}  
               />
+                <button onClick = {(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setShowPassword(prev => !prev);
+                  tabIndex = "-1"
+                }} className = 'login-password-show'>
+             {showPassword ?  <EyeOff size = {18}/> : <Eye size = {18}/>  }
+              </button>
               </div>
         </div>
 

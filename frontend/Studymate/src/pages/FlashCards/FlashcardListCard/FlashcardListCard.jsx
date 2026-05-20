@@ -4,15 +4,7 @@ import './flashcardListCard.scss';
 import { useNavigate } from 'react-router';
 import { formatTimeAgo, truncateTitle } from '../../../utils/util';
 
-const FlashcardListCard = ({ 
- 
-  timeAgo = "6 MINUTES AGO", 
-  totalCards = 10, 
-
-  reviewedCards = 5,
-  card 
-}) => {
-  // Calculate the progress bar width dynamically
+const FlashcardListCard = ({card}) => {
    const progressPercentage = (card?.reviewedCardsCount / card?.totalCards) * 100;
    const masteryScore = (card?.masteredCount / card?.totalCards ) * 100;
    const navigate = useNavigate();

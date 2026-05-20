@@ -8,7 +8,6 @@ import './DocumentDetailsPage.scss';
 import PageHeader from '../../../components/common/PageHeader/PageHeader';
 import Tab from '../../../components/common/Tab/Tab';
 import DocumentViewer from '../../../components/DocumentViewer/DocumentViewer';
-
 import ChatUi from '../../../components/ChatInterface/ChatUi';
 import AiConcepts from '../../../components/AiConcepts/AiConcepts';
 import SummaryAction from '../../../components/Summarize-action/SummaryAction';
@@ -75,7 +74,9 @@ console.log(pdfUrl);
       <>
       
       <div className='ai-document-grid'>
-        <DocumentViewer pdfUrl = {pdfUrl} aiConcept = {aiConcept}/>
+        <div className={`ai-document-grid__viewer ${aiConcept ? 'ai-document-grid__viewer--hidden-mobile' : ''}`}>
+            <DocumentViewer pdfUrl={pdfUrl} aiConcept={aiConcept}/>
+        </div>
        {isSummaryModalOpen && <SummaryAction toggleSummary = {toggleSummary}/>}
      { aiConcept ? <AiConcepts/> : null}
       </div>
@@ -85,7 +86,7 @@ console.log(pdfUrl);
   const toggleSummary = () => {
     setIsSummaryModalOpen(prev => !prev)
   }
-  //toggle concepts
+
   const toggleConceptTab = () => {
     setAiConcept(prev => !prev)
   }
@@ -128,7 +129,7 @@ console.log(pdfUrl);
           </Link>
       </div>
       <button className= {`${activeTab !== 'Document' ? 'hide' : 'concept-btn'}`} 
-      onClick={toggleConceptTab}
+      onClick = {toggleConceptTab}
       title={aiConcept ? "Close Concepts tab" : "Open Concepts tab"}
       disabled = {loading}
       > 
@@ -136,13 +137,13 @@ console.log(pdfUrl);
       {!aiConcept ? <PanelRightOpen/> : <PanelLeftClose/>}
       </button>
      
-        <button className= {`${activeTab !== 'Document' ? 'hide': 'summary-btn'}`}
+        {!aiConcept && <button className= {`${activeTab !== 'Document' ? 'hide': 'summary-btn'}`}
         onClick={toggleSummary}
         disabled = {loading}
         title='Summarize document'
         >
           Document Summary
-          </button>
+          </button>}
    
       <PageHeader title = {document.title}/>
       <Tab activeTab = {activeTab}  tabs = {tabs} handleTabChange = {handleTabChange}/>

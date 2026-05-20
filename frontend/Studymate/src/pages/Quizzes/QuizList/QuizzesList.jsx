@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import quizService from '../../../services/quizService.js';
 import { useParams } from 'react-router';
 import Button from '../../../components/common/Button/Button';
-import { FileQuestion, Plus,X } from 'lucide-react';
+import { FileQuestion, Plus,Sparkles,X } from 'lucide-react';
 import './QuizzesList.scss';
 import QuizCard from '../../../components/quizzes/QuizCard.jsx';
 import aiService from '../../../services/aiService.js';
@@ -149,8 +149,8 @@ const generateQuiz = async() => {
             </div>
             <Button onClick={() => {
                 setIsGenerating(prev => !prev)
-            }} disabled = {loading}>
-                <Plus/> Generate Quiz
+            }} disabled = {loading} className={'deck-overview__header--btn'}>
+                 Generate Quiz <Sparkles size={15} color='gold' fill='#fff'/>
             </Button>
         </div>
        {loading ? 

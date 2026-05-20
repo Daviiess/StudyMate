@@ -5,7 +5,7 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo1.png';
 import toast from 'react-hot-toast';
-import { Mail, Lock, ArrowRight, User } from 'lucide-react';
+import { Mail, Lock, ArrowRight, User, Eye, EyeOff } from 'lucide-react';
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -15,12 +15,13 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [studyGoal , setStudyGoal] = useState(''); 
+  const [showPassword, setShowPassword] = useState(false); 
   const { login } = useAuth();
   const navigate = useNavigate();
   
 
   useEffect(() => {
-     if(error){
+     if(error){ 
       const timer = setTimeout(() => {
         setError(null)
       }, 3000);
@@ -105,7 +106,7 @@ const RegisterPage = () => {
               <div className='register__input-wrapper'>
                 <Lock className={`${focusedField === 'password' ? 'focus' : ''}`}/>
                 <input 
-                  type="password"
+                  type={`${showPassword ? 'text': 'password'}`}
                   placeholder='******'
                   className='register__input'
                   onFocus={() => setFocusedField('password')}
@@ -113,6 +114,14 @@ const RegisterPage = () => {
                   onChange={(e) => setPassword(e.target.value.trim())}  
                   required
                 />
+                <button onClick = {(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setShowPassword(prev => !prev);
+                  tabIndex = "-1"
+                }} className = 'login-password-show'>
+             {showPassword ?  <EyeOff size = {18}/> : <Eye size = {18}/>  }
+              </button>
               </div>
             </div>
             {/* 'Secondary School' , 'University' , 'Professional Certification' , 'Personal use' */}

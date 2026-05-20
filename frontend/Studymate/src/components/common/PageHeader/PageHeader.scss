@@ -5,3 +5,15 @@
     letter-spacing: .3px;
     color: $color-grey-dark;
 }
+@media (max-width: 760px) {
+    .page-header {
+        padding: 0 2rem;
+        font-size: 1.6rem;
+           
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; // ✅ truncates long title with ...
+            max-width: 75%;
+        
+    }
+}

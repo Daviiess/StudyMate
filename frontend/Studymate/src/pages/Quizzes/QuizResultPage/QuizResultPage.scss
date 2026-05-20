@@ -259,3 +259,62 @@
    height: calc(100vh - 20rem);
   }
 }
+@media (max-width: 760px) {
+    .quiz-results {
+        padding: 1.5rem;
+
+        &__title {
+            font-size: 1.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; // ✅ truncates long title with ...
+            max-width: 100%;
+        }
+
+        &__score-value {
+            font-size: 4rem;
+        }
+
+        &__review-section {
+            height: auto;
+            overflow: visible;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .quiz-results {
+        &__title {
+            font-size: 1.5rem;
+        }
+
+        &__score-card {
+            padding: 3rem 1.5rem;
+        }
+
+        &__stats-container {
+            gap: 1rem;
+        }
+
+        &__stat-pill {
+            font-size: 1.2rem;
+            padding: 0.6rem 1.2rem;
+        }
+
+        &__question-text {
+            font-size: 1.5rem;
+        }
+
+        &__option {
+            font-size: 1.3rem;
+            padding: 1.2rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        &__review-card {
+            padding: 2rem 1.5rem;
+        }
+    }
+}

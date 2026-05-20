@@ -137,3 +137,101 @@
         margin-bottom: 2rem;
     }
 }
+@media (max-width: 760px) {
+    .doc-viewer {
+        height: auto;
+        border-radius: 0.8rem;
+
+        &__header {
+            padding: 1rem 1.5rem;
+
+            & span {
+                font-size: 1.2rem;
+            }
+
+            & a {
+                font-size: 1rem;
+                gap: 0.5rem;
+            }
+        }
+
+        &__holder {
+            padding: 1rem 1.5rem;
+        }
+
+        &__toolbar {
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        &__pill {
+            padding: 0.3rem;
+            gap: 0.3rem;
+        }
+
+        &__icon-btn {
+            width: 2.8rem;
+            height: 2.8rem;
+        }
+
+        &__page-selector {
+            font-size: 1.1rem;
+            gap: 0.5rem;
+            padding: 0 0.5rem;
+        }
+
+        &__page-input {
+            width: 3.5rem;
+        }
+
+        &__zoom-text {
+            font-size: 1.1rem;
+            width: 4rem;
+        }
+
+        &__canvas-container {
+            padding: 1rem;
+
+            // allow horizontal scroll for zoomed PDFs
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    }
+}
+@media (max-width: 650px) {
+    .doc-viewer {
+        max-height: none;   // ✅ remove fixed height constraint
+        height: auto;       // ✅ let it grow naturally
+        border-radius: 0.8rem;
+
+        &__header {
+            padding: 0.8rem 1rem;
+
+            & span {
+                font-size: 1.1rem;
+            }
+
+            // hide "open in new tab" text, keep icon only
+            & a span {
+                display: none;
+            }
+        }
+
+        &__holder {
+            padding: 0.8rem 1rem;
+        }
+
+        &__toolbar {
+            flex-direction: column;  // ✅ stack toolbar pills vertically
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        &__canvas-container {
+            padding: 0.8rem;
+            min-height: 40vh;  // ✅ guarantee minimum visible area
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+    }
+}
