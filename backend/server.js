@@ -43,7 +43,7 @@ app.use('/api/flashcards' , flashcardRoutes);
 app.use('/api/quizzes' , quizRoutes);
 app.use('/api/ai' , aiRoutes);
 app.use('/api/progress', progressRoutes);
-app.use(protect);
+
 
 app.use(errorHandler)
 
