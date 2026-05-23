@@ -16,6 +16,8 @@ const DeckOverviewPage = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [deck , setDeck] = useState([]); 
   const [deckLoading, setDeckLoading] = useState(false);
+  const [generatingLoading, setGeneratingLoading] = useState(false);
+
   const options = {
   count,
   difficulty
@@ -52,16 +54,17 @@ const DeckOverviewPage = () => {
 
   
   const handleCardGeneration = async() => {
-   setDeckLoading(true)
+    setGeneratingLoading(true) 
     try{
     setIsGenerating(false);
     await generateDeck(documentId, options);
     await fetchDeck();
     }catch(error){
       toast.error('Failed to create deck')
-    }finally{
-      setDeckLoading(false)
-    }
+    } finally{
+      setIsGenerating(false);
+      setGeneratingLoading(false)
+    } 
   }
 
 
@@ -147,8 +150,8 @@ const DeckOverviewPage = () => {
           </div>
 
           <div className="options-modal__footer">
-            <Button onClick={handleCardGeneration} disabled={deckLoading}>
-              Confirm & Generate
+            <Button onClick={handleCardGeneration} disabled={generatingLoading}>
+              {generatingLoading ? <> <div className='loading-spinner'/> Generating </> : 'Confirm & Generate'}
             </Button>
           </div>
         </div>
