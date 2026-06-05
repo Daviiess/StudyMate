@@ -70,6 +70,7 @@
 
     }
   }
+
   .menu-icon{
     display: flex;
     align-items: start;
@@ -80,7 +81,25 @@
     display: none;
 
   }
-  @media screen and (min-width: 768px){
-
-  }
 }
+.mobile__logout-btn{
+    opacity: 0;
+}
+ @media (max-width: 760px){
+  .mobile__logout-btn{
+    opacity: 1;
+    margin-right: auto;
+    margin-left: 1rem;
+    padding: 0 1rem;
+    background: transparent;
+    border: none;
+    color: $color-grey-medium;
+    transition: all .5s;
+    &:hover{
+      transform: translateX(-2px);
+    }
+    &:active{
+      transform: translateX(0);
+    }
+  }
+ }

@@ -1,68 +1,131 @@
+import React from 'react';
 
-function parseExplanation(str) {
-  try {
-    const clean = str?.replace(/```json\n?|```/g, '').trim();
-    return JSON.parse(clean);
-  } catch (e) {
-    return null;
-  }
-}
+// 1. Text cleaner (Removes * and #)
+const cleanText = (text) => {
+  if (typeof text !== 'string') return text;
+  return text.replace(/[*#]/g, '').trim(); 
+};
 
 export function ConceptRenderer({ data }) {
-  const parsed = parseExplanation(data?.explanation);
-  if (!parsed) return (
-    <div className="empty-state" style={s.emptyState}> {/* Use className for SCSS, or style={} for JS */}
-      <div className="empty-state__icon" style={s.emptyIcon}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 18h6" />
-          <path d="M10 22h4" />
-          <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
-        </svg>
-      </div>
-      <h3 className="empty-state__title" style={s.emptyTitle}>Ready to learn?</h3>
-      <p className="empty-state__desc" style={s.emptyDesc}>
-        Ask for a concept below, and Studymate will break it down into easy-to-understand pieces.
-      </p>
-    </div>
-  );
+  if (!data) return null;
 
-  const qr = parsed?.query_response || parsed?.exam_explanation;
-  const topic = qr?.topic || data?.concept;
-  const explanation = qr?.explanation || '';
-  const analogy = qr?.analogy || null;
+  let parsed = null;
+  let rawString = data?.explanation || '';
+
+  // 2. THE BULLETPROOF PARSER
+  try {
+    const startIndex = rawString.indexOf('{');
+    const endIndex = rawString.lastIndexOf('}');
+
+    if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+      const jsonString = rawString.substring(startIndex, endIndex + 1);
+      parsed = JSON.parse(jsonString);
+    } 
+  } catch (e) {
+    parsed = null; 
+  }
+
+  // 3. Extract Topic (Checking the new "title" key as well)
+  const topic = data?.concept || parsed?.query || parsed?.topic || parsed?.title || 'Concept Explanation';
+
+  // 4. CHECK FOR THE NEW "SECTIONS" SCHEMA
+  const sections = Array.isArray(parsed?.sections) ? parsed.sections : [];
+
+  // 5. Extract Standard Explanation (if sections don't exist)
+  let explanation = '';
+  if (parsed && sections.length === 0) {
+    explanation = parsed.explanation || parsed.answer || parsed.details || parsed.query_response?.explanation || '';
+    if (!explanation) {
+      explanation = JSON.stringify(parsed, null, 2);
+    }
+  } else if (!parsed) {
+    explanation = rawString.replace(/```json/gi, '').replace(/```/g, '').trim();
+  }
+  explanation = cleanText(explanation);
+
+  // 6. Extract Analogy (if it exists)
+  const analogy = parsed?.analogy || parsed?.query_response?.analogy || null;
+  const hasAnalogyContent = analogy && (
+    typeof analogy === 'string' ? analogy.trim().length > 0 : Object.keys(analogy).length > 0
+  );
 
   return (
     <div style={s.wrap}>
-      <div style={s.label}>Concept</div>
-      <h2 style={s.title}>{topic}</h2>
-      <p style={s.body}>{explanation}</p>
+      <h2 style={s.title}>{cleanText(topic)}</h2>
 
-      {analogy && (
+      {/* RENDER THE NEW "SECTIONS" FORMAT IF IT EXISTS */}
+      {sections.length > 0 ? (
+        <div style={{ marginBottom: '2rem' }}>
+          {sections.map((section, index) => (
+            <div key={index} style={{ marginBottom: '1.25rem' }}>
+              {section.heading && (
+                <h3 style={s.sectionHeading}>{cleanText(section.heading)}</h3>
+              )}
+              {section.content && (
+                <div style={s.process}>
+                  {cleanText(section.content)}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* OTHERWISE, RENDER STANDARD TEXT */
+        <p style={s.body}>{explanation}</p>
+      )}
+
+      {/* Render Analogy exactly as before */}
+      {hasAnalogyContent && (
         <>
           <hr style={s.divider} />
-          <div style={s.label}>Analogy</div>
+          <div style={s.labelWrapper}>
+            <span style={s.labelIcon}>💡</span>
+            <p style={s.label}>Real-world Analogy</p>
+          </div>
+          
           <div style={s.card}>
-            {analogy.scenario && (
-              <span style={s.pill}>{analogy.scenario}</span>
-            )}
-
-            {analogy.elements?.length > 0 && (
-              <div style={s.grid}>
-                {analogy.elements.map((el, i) => (
-                  <div key={i} style={s.chip}>
-                    <div style={s.chipTitle}>{el.data_point || el.name}</div>
-                    <div style={s.chipDesc}>{el.description}</div>
+            {typeof analogy === 'string' ? (
+              <div style={s.process}>{cleanText(analogy)}</div>
+            ) : (
+              <>
+                {(analogy.real_world_object || analogy.scenario || analogy.concept) && (
+                  <div style={{ marginBottom: '1.25rem' }}>
+                     <span style={s.badge}>
+                      {cleanText(analogy.real_world_object || analogy.scenario || analogy.concept)}
+                    </span>
                   </div>
-                ))}
-              </div>
-            )}
+                )}
+                
+                {(analogy.explanation || analogy.process || analogy.description) && (
+                  <div style={s.process}>
+                    {cleanText(analogy.explanation || analogy.process || analogy.description)}
+                  </div>
+                )}
 
-            {analogy.process && (
-              <div style={s.process}>{analogy.process}</div>
-            )}
+                {Array.isArray(analogy.elements) && analogy.elements.length > 0 && (
+                  <div style={s.grid}>
+                    {analogy.elements.map((el, i) => (
+                      <div key={i} style={s.chip}>
+                        <p style={s.chipTitle}>{cleanText(el.data_point || el.name)}</p>
+                        <p style={s.chipDesc}>{cleanText(el.description)}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-            {analogy.connection_to_topic && (
-              <div style={s.connection}>{analogy.connection_to_topic}</div>
+                {!analogy.real_world_object && !analogy.explanation && !analogy.scenario && !Array.isArray(analogy.elements) && !analogy.process && !analogy.description && (
+                  <div style={s.process}>
+                    {Object.entries(analogy).map(([key, value]) => (
+                      typeof value === 'string' ? (
+                        <div key={key} style={{ marginBottom: 12 }}>
+                          <strong style={{ textTransform: 'capitalize', color: '#3730a3' }}>{key.replace(/_/g, ' ')}: </strong> 
+                          {cleanText(value)}
+                        </div>
+                      ) : null
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </>
@@ -71,53 +134,104 @@ export function ConceptRenderer({ data }) {
   );
 }
 
+// 🎨 PREMIUM STYLES DICTIONARY
 const s = {
-  wrap: { padding: '1rem 0', fontFamily: 'sans-serif' },
-  label: { fontSize: 11, fontWeight: 600, letterSpacing: '0.07em', textTransform: 'uppercase', color: '#9ca3af', marginBottom: 6 },
-  title: { fontSize: 22, fontWeight: 500, marginBottom: 16 },
-  body: { fontSize: 15, lineHeight: 1.75, marginBottom: 24, color: '#464646' },
-  divider: { border: 'none', borderTop: '1px solid #e5e7eb', margin: '20px 0' },
-  card: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 20 },
-  pill: { display: 'inline-block', fontSize: 12, padding: '3px 10px', borderRadius: 999, background: '#f3f4f6', color: '#6b7280', marginBottom: 14, border: '1px solid #e5e7eb' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 8, marginBottom: 14 },
-  chip: { background: '#f9fafb', borderRadius: 8, padding: '10px 12px', border: '1px solid #e5e7eb' },
-  chipTitle: { fontSize: 12, fontWeight: 500, marginBottom: 3 },
-  chipDesc: { fontSize: 12, color: '#6b7280', lineHeight: 1.5 },
-  process: { fontSize: 13, color: '#6b7280', lineHeight: 1.6, padding: '10px 14px', borderLeft: '2px solid #d1d5db', marginBottom: 12, background: '#f9fafb', borderRadius: 4 },
-  connection: { fontSize: 13, color: '#6b7280', lineHeight: 1.6, padding: '10px 14px', border: '1px solid #e5e7eb', borderRadius: 8 },
-  emptyState: { 
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    textAlign: 'center', 
-    padding: '48px 24px', 
-    
-   
+  wrap: { 
+    padding: '0.5rem 0 2rem 0', 
+    fontFamily: 'Inter, system-ui, sans-serif' 
+  },
+  title: { 
+    fontSize: 22, 
+    fontWeight: 700, 
+    color: '#0f172a', 
+    letterSpacing: '-0.02em', 
+    lineHeight: 1.3, 
+    margin: '0 0 1.25rem' 
+  },
+  sectionHeading: {
+    fontSize: 16,
+    fontWeight: 600,
+    color: '#1e293b', // Slightly softer slate for subheadings
+    margin: '0 0 0.5rem 0'
+  },
+  body: { 
+    fontSize: 15.5, 
+    color: '#334155', 
+    lineHeight: 1.75, 
+    margin: '0 0 2rem', 
+    whiteSpace: 'pre-wrap' 
+  },
+  divider: {
+    border: 'none',
+    borderTop: '1px solid #e2e8f0',
+    margin: '2rem 0 1.5rem 0'
+  },
+  labelWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginBottom: '1rem'
+  },
+  labelIcon: {
+    fontSize: '14px'
+  },
+  label: { 
+    fontSize: 12, 
+    fontWeight: 700, 
+    textTransform: 'uppercase', 
+    letterSpacing: '0.1em', 
+    color: '#6366f1', 
+    margin: 0 
+  },
+  card: { 
+    background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)', 
     borderRadius: 12, 
-    margin: '16px 0' 
+    padding: '1.5rem', 
+    border: '1px solid #e2e8f0',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)'
   },
-  emptyIcon: { 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    width: 48, 
-    height: 48, 
-    backgroundColor: '#F3F0FF', 
-    color: '#7C3AED', 
-    borderRadius: '50%', 
-    marginBottom: 16 
+  badge: {
+    display: 'inline-block',
+    background: '#e0e7ff', 
+    color: '#4338ca', 
+    padding: '4px 12px',
+    borderRadius: 999, 
+    fontSize: 13,
+    fontWeight: 600,
+    letterSpacing: '0.01em'
   },
-  emptyTitle: { 
-    fontSize: 18, 
-    fontWeight: 600, 
-    color: '#1f2937', 
-    marginBottom: 8 
+  process: { 
+    fontSize: 15, 
+    color: '#475569', 
+    lineHeight: 1.7, 
+    margin: '0 0 1.5rem', 
+    whiteSpace: 'pre-wrap',
+    paddingLeft: '1rem',
+    borderLeft: '3px solid #cbd5e1'
   },
-  emptyDesc: { 
+  grid: { 
+    display: 'grid', 
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
+    gap: 12, 
+    marginTop: 20 
+  },
+  chip: { 
+    background: '#ffffff', 
+    borderRadius: 8, 
+    padding: '1.25rem', 
+    border: '1px solid #f1f5f9',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' 
+  },
+  chipTitle: { 
     fontSize: 14, 
-    color: '#6b7280',
-    lineHeight: 1.5, 
-    maxWidth: 280 
-  }
+    fontWeight: 600, 
+    color: '#0f172a', 
+    margin: '0 0 6px' 
+  },
+  chipDesc: { 
+    fontSize: 14, 
+    color: '#64748b', 
+    lineHeight: 1.6, 
+    margin: 0 
+  },
 };

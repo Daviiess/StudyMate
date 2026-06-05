@@ -40,6 +40,7 @@ const fetchDocument = async() => {
     setLoading(false)
   }
 }
+console.log('document-holder: ', document);
   useEffect(() => {
   fetchDocument()
   }, [id])
@@ -52,11 +53,11 @@ const filePath = document?.filePath;
 if(filePath.startsWith('http://') || filePath.startsWith('https://')){
   return filePath;
 }
-const baseUrl = `${import.meta.env.VITE_API_URL || 'http://localhost:8000' }`;
+const baseUrl = `${ import.meta.env.VITE_API_URL ||  'http://localhost:8000' }`;
 return `${baseUrl}${filePath.startsWith('/') ? '' : '/'}${filePath}`
 } 
  const pdfUrl = getPdfUrl();
-console.log(pdfUrl); 
+console.log('pdf-url',pdfUrl); 
 
 
  const renderContent = () => {

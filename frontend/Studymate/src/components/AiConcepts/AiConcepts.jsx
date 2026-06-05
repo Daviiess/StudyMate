@@ -47,7 +47,7 @@ const AiConcepts = () => {
       Stuck on a difficult concept? Let's figure it out together.
      </h3>
     <p className='ai-concepts__middle-text--2'>
-      Don't let complex paragraphs slow your progress. Ask a direct question below. StudyMate is here to simplify the jargon and guide your study session.
+    StudyMate is here to simplify the jargon and guide your study session.
     </p>
     </div>
       <div className='ai-concepts__ai-output'>

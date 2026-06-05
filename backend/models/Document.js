@@ -18,6 +18,10 @@ const documentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cloudinaryPublicId: {
+    type: String,
+    default: null
+    },
     extractedText: {
         type: String,
         default:''

@@ -123,7 +123,7 @@ export const generateSummary = async (text) => {
 
     // 2. Check if we have already summarized this exact text
     if (summaryCache.has(textHash)) {
-        console.log('✅ Serving summary from cache (Saved 1 Gemini API call!)');
+       /*  console.log('✅ Serving summary from cache (Saved 1 Gemini API call!)'); */
         return summaryCache.get(textHash);
     }
 
@@ -132,7 +132,7 @@ export const generateSummary = async (text) => {
     Text: ${text.substring(0, 20000)}`;
 
     try {
-        console.log('⏳ Calling Gemini API for a fresh summary...');
+       /*  console.log('⏳ Calling Gemini API for a fresh summary...'); */
         
         // Remember to pass 'model' into the helper function!
         const result = await generateContentWithRetry(model, prompt);

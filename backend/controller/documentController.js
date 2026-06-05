@@ -1,65 +1,84 @@
 import Document from '../models/Document.js';
 import Flashcard from '../models/Flashcard.js';
 import Quiz from '../models/Quiz.js';
-import fs from 'fs/promises';
+
 import mongoose from 'mongoose';
-import path from 'path';
+
 import {extractTextFromPDF} from '../utils/pdfParser.js';
 import {chunkText} from '../utils/textChunker.js';
-/* uploadDocuments,
-    getUserDocuments,
-    getDocumentById,
-    deleteDocument */
-export const uploadDocuments = async (req, res, next) => {
-try{
-        if(!req.file){
-        return res.status(400).json({
-            success: false,
-            error: "No file found",
-            statusCode: 400
+import cloudinary from '../config/cloudinary.js';
+ import { writeFile, unlink } from 'fs/promises';
+import { tmpdir } from 'os';
+import { join } from 'path';
+const uploadToCloudinary = async (buffer, originalname) => {
+    const tempPath = join(tmpdir(), `upload_${Date.now()}_${originalname}`);
+    try {
+        await writeFile(tempPath, buffer);
+        const result = await cloudinary.uploader.upload(tempPath, {
+            folder: 'studymate/documents',
+            resource_type: 'raw',
+            format: 'pdf',
+            access_mode: 'public'
         });
+        return result;
+    } finally {
+        await unlink(tempPath).catch(() => {});
     }
-    const {title} = req.body;
-    if(!title){
-          //Delete uploaded file if no title provided
-          await fs.unlink(req.file.path);
-          return res.status(400).json({
-            success: false,
-            error: "Please provide a document title",
-            statusCode: 400
-          });  
+};
+export const uploadDocuments = async (req, res, next) => {
+    try {
+        if(!req.file){
+            return res.status(400).json({
+                success: false,
+                error: "No file found",
+                statusCode: 400
+            });
         }
-        /* const baseUrl = `http://localhost:${process.env.PORT || 8000}`;
-        const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`; */
-    const document = await Document.create({
-        userId: req.user._id,
-        title: title,
-        fileName: req.file.originalname,
-        filePath: `/uploads/documents/${req.file.filename}`,
-        fileSize: req.file.size,
-        status: 'processing'
-    });
+        const {title} = req.body;
+        if(!title){
+            return res.status(400).json({
+                success: false,
+                error: "Please provide a document title",
+                statusCode: 400
+            });
+        }
 
-     processPdf(document._id, req.file.path).catch(err => {
-        console.error('Pdf processing error: ', err);
-     });
-     res.status(201).json({
-        success: true,
-        data: document,
-        message: 'Document uploaded successfully. Processing in progress...'
-     })
-}catch(error){
-    if(req.file){
-        await fs.unlink(req.file.path).catch(() => {})
-    };
-    next(error);
- }
+        // 1. Upload to Cloudinary first
+ const cloudinaryResult = await uploadToCloudinary(req.file.buffer, req.file.originalname);
+
+        // 2. Save to MongoDB with Cloudinary URL
+        const document = await Document.create({
+            userId: req.user._id,
+            title: title,
+            fileName: req.file.originalname,
+            filePath: cloudinaryResult.secure_url,
+            cloudinaryPublicId: cloudinaryResult.public_id,
+            fileSize: req.file.size,
+            status: 'processing'
+        });
+
+        // 3. Process PDF in background
+        processPdf(document._id, req.file.buffer).catch(err => {
+         console.error('Pdf processing error: ', err);
+        });
+
+        // 4. Respond to client
+        res.status(201).json({
+            success: true,
+            data: document,
+            message: 'Document uploaded successfully. Processing in progress...'
+        });
+
+    } catch(error) {
+        console.error('Upload error:', error);
+        next(error);
+    }
 }
 
  //Process PDF in background (in production, use a queue like Bull)
- const processPdf = async(documentId, filePath) => {
+ const processPdf = async(documentId, pdfBuffer) => {
         try{
-            const {text} = await extractTextFromPDF(filePath);
+            const {text} = await extractTextFromPDF(pdfBuffer);
             
             const chunks = chunkText(text , 500 , 50);
 
@@ -69,10 +88,8 @@ try{
                 chunks: chunks,
                 status: 'ready'
             });
-             console.log(`Document ${documentId} processed successfully`  );
         }catch(error){
             console.error(`Error processing document ${documentId}:` , error);
-
         await Document.findByIdAndUpdate(documentId, {
             status: 'failed'
         });
@@ -179,15 +196,11 @@ try{
         json({ success: false,
          error: "Document not found" });
 }
-        const urlParts = document.filePath.split('/');
-        const uniqueFilename = urlParts[urlParts.length - 1];
-        
-        const physicalPath = path.join(process.cwd(), 'uploads/documents', uniqueFilename);
-        
+if(document.cloudinaryPublicId){
+    await cloudinary.uploader.destroy(document.cloudinaryPublicId, { resource_type: 'raw' });
+}
 
-        await fs.unlink(physicalPath).catch((err) => {
-            console.log("Physical file already deleted or not found");
-        });
+        await cloudinary.uploader.destroy(document.cloudinaryPublicId, { resource_type: 'raw' });
         await Flashcard.deleteMany({ documentId: document._id });
         await Quiz.deleteMany({ documentId: document._id });
         await document.deleteOne();
