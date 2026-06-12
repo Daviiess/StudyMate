@@ -42,4 +42,4 @@ The application follows a standard MERN-like client-server architecture with asy
 
 | Dashboard | Document List |
 | :---: | :---: |
-| ![StudyMate Dashboard](./src/assets/DashboardPage.png) | ![StudyMate DocumentList](./src/assets/DocumentList.png) |
+| ![StudyMate Dashboard](./frontend/Studymate/src/assets/DashboardPage.png) | ![StudyMate DocumentList](./frontend/Studymate/src/assets/DocumentList.png) |
