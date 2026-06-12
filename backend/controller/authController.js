@@ -109,7 +109,7 @@ try{
     user.lastLoginDate = new Date(); 
     await user.save();
     const token = generateToken(user._id);
-    res.status(201).json({
+    res.status(200).json({
         success: true,
         data: {
             user: {

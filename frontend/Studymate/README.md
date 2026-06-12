@@ -1,16 +1,45 @@
-# React + Vite
+# 🚀 StudyMate
+**Transforming passive reading into interactive, AI-driven learning.**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📖 Overview
+For students, digesting dense academic PDFs often results in passive reading and poor knowledge retention. StudyMate is a full-stack web application engineered to solve this by automating the creation of active recall materials. By uploading course documents, the system leverages AI text extraction to instantly generate summaries, interactive quizzes, and flashcards.
 
-Currently, two official plugins are available:
+Developed as my inaugural full-stack project, StudyMate serves as a functional MVP that demonstrates end-to-end system design, RESTful API development, and the integration of artificial intelligence into a seamless user experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Key Features
+- **Intelligent PDF Processing:** Robust file upload system that extracts and sanitizes raw text from complex academic documents.
+- **Automated Summarization:** Condenses lengthy chapters into digestible, high-yield study notes.
+- **Dynamic Active Recall Generation:** Programmatically generates targeted flashcards and multiple-choice quizzes based on the extracted context.
+- **Contextual AI Chatbot:** An embedded assistant that allows users to query specific concepts directly related to their uploaded materials.
+- **Responsive & Accessible UI:** A clean, minimal interface styled strictly with SCSS for optimal performance across desktop and mobile.
 
-## React Compiler
+## 🧠 Architecture / How It Works
+The application follows a standard MERN-like client-server architecture with asynchronous AI processing:
+- **Client (React):** Handles state management and file uploads via multipart form data.
+- **Server (Express/Node.js):** Receives the payload, utilizes a parsing buffer to extract text, and handles routing.
+- **AI Layer:** The sanitized text is dispatched to the Gemini AI service with strict prompt engineering to return structured JSON data (quizzes/flashcards).
+- **Database (MongoDB):** The processed materials are stored relationally for future retrieval and progress tracking.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+**Frontend**
+- React.js (Hooks, Context API)
+- SCSS (Modular component styling, BEM methodology)
+- Axios (HTTP client)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Backend**
+- Node.js & Express.js (REST API architecture)
+- Multer (Multipart/form-data handling for PDF uploads)
+- Cloudinary (PDF cloud storage)
+- PDF-Parse (Server-side text extraction)
+
+**Database & Deployment**
+- MongoDB / Mongoose (Data modeling)
+- Vercel (Frontend hosting)
+- Render (Backend hosting)
+
+## 📸 Screenshots
+
+| Dashboard | Document List |
+| :---: | :---: |
+| ![StudyMate Dashboard](./src/assets/DashboardPage.png) | ![StudyMate DocumentList](./src/assets/DocumentList.png) |

@@ -43,10 +43,10 @@ export const uploadDocuments = async (req, res, next) => {
             });
         }
 
-        // 1. Upload to Cloudinary first
+        //  Upload to Cloudinary first
  const cloudinaryResult = await uploadToCloudinary(req.file.buffer, req.file.originalname);
 
-        // 2. Save to MongoDB with Cloudinary URL
+        //  Save to MongoDB with Cloudinary URL
         const document = await Document.create({
             userId: req.user._id,
             title: title,
@@ -57,7 +57,7 @@ export const uploadDocuments = async (req, res, next) => {
             status: 'processing'
         });
 
-        // 3. Process PDF in background
+        //  Process the PDF in background
         processPdf(document._id, req.file.buffer).catch(err => {
          console.error('Pdf processing error: ', err);
         });
@@ -75,7 +75,7 @@ export const uploadDocuments = async (req, res, next) => {
     }
 }
 
- //Process PDF in background (in production, use a queue like Bull)
+ 
  const processPdf = async(documentId, pdfBuffer) => {
         try{
             const {text} = await extractTextFromPDF(pdfBuffer);

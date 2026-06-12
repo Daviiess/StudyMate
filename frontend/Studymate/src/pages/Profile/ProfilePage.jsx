@@ -88,9 +88,6 @@ if (!emailRegex.test(userEmail)) {
     toast.error('Failed to change password' || error.message);
   }
  }
- 
-
-
   const avatarInitial = username ? username.charAt(0).toUpperCase() : 'U';
   return (
     <div className="profile-settings">
