@@ -1,6 +1,6 @@
 import React from 'react';
 
-// 1. Text cleaner (Removes * and #)
+
 const cleanText = (text) => {
   if (typeof text !== 'string') return text;
   return text.replace(/[*#]/g, '').trim(); 
@@ -12,7 +12,6 @@ export function ConceptRenderer({ data }) {
   let parsed = null;
   let rawString = data?.explanation || '';
 
-  // 2. THE BULLETPROOF PARSER
   try {
     const startIndex = rawString.indexOf('{');
     const endIndex = rawString.lastIndexOf('}');
@@ -25,13 +24,12 @@ export function ConceptRenderer({ data }) {
     parsed = null; 
   }
 
-  // 3. Extract Topic (Checking the new "title" key as well)
+
   const topic = data?.concept || parsed?.query || parsed?.topic || parsed?.title || 'Concept Explanation';
 
-  // 4. CHECK FOR THE NEW "SECTIONS" SCHEMA
+
   const sections = Array.isArray(parsed?.sections) ? parsed.sections : [];
 
-  // 5. Extract Standard Explanation (if sections don't exist)
   let explanation = '';
   if (parsed && sections.length === 0) {
     explanation = parsed.explanation || parsed.answer || parsed.details || parsed.query_response?.explanation || '';
@@ -43,7 +41,7 @@ export function ConceptRenderer({ data }) {
   }
   explanation = cleanText(explanation);
 
-  // 6. Extract Analogy (if it exists)
+
   const analogy = parsed?.analogy || parsed?.query_response?.analogy || null;
   const hasAnalogyContent = analogy && (
     typeof analogy === 'string' ? analogy.trim().length > 0 : Object.keys(analogy).length > 0
@@ -53,7 +51,7 @@ export function ConceptRenderer({ data }) {
     <div style={s.wrap}>
       <h2 style={s.title}>{cleanText(topic)}</h2>
 
-      {/* RENDER THE NEW "SECTIONS" FORMAT IF IT EXISTS */}
+
       {sections.length > 0 ? (
         <div style={{ marginBottom: '2rem' }}>
           {sections.map((section, index) => (
@@ -70,11 +68,11 @@ export function ConceptRenderer({ data }) {
           ))}
         </div>
       ) : (
-        /* OTHERWISE, RENDER STANDARD TEXT */
+   
         <p style={s.body}>{explanation}</p>
       )}
 
-      {/* Render Analogy exactly as before */}
+    
       {hasAnalogyContent && (
         <>
           <hr style={s.divider} />
@@ -134,7 +132,7 @@ export function ConceptRenderer({ data }) {
   );
 }
 
-// 🎨 PREMIUM STYLES DICTIONARY
+
 const s = {
   wrap: { 
     padding: '0.5rem 0 2rem 0', 
@@ -151,7 +149,7 @@ const s = {
   sectionHeading: {
     fontSize: 16,
     fontWeight: 600,
-    color: '#1e293b', // Slightly softer slate for subheadings
+    color: '#1e293b', 
     margin: '0 0 0.5rem 0'
   },
   body: { 

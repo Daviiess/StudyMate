@@ -35,7 +35,7 @@
       justify-content: space-between;
       max-width: 160rem;
       margin: 0 auto;
-      padding: 1rem 0; // Tighter padding
+      padding: 1rem 0; 
     }
   }
 
@@ -44,7 +44,7 @@
     align-items: center;
     gap: 12px;
     text-decoration: none;
-    group: hover; // Setup for icon hover
+    group: hover; 
 
     &-icon {
       width: 40px;
@@ -85,7 +85,7 @@
     }
   }
 
-  // ─── BUTTONS (Premium Polish) ─────────────────────────
+
   .btn-ghost {
     padding: 10px 20px;
     border-radius: 10px;
@@ -185,7 +185,7 @@
     }
   }
 
-  // ─── HERO (Gradient Text & Floating Elements) ─────────
+  
   &__hero {
     text-align: center;
     padding: 10rem 2rem 8rem;
@@ -224,7 +224,7 @@
     margin-bottom: 1.8rem;
 
     span { 
-      // Gradient Text Effect
+
       background: linear-gradient(135deg, $color-Primary, $color-Accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -278,9 +278,9 @@
     }
   }
 
-  &__divider { display: none; } // Replaced by the border-top on stats
+  &__divider { display: none; } 
 
-  // ─── FEATURES (Bento Grid Inspired) ───────────────────
+
   &__features {
     padding: 8rem 2rem;
     max-width: $max-content;
@@ -389,7 +389,7 @@
     line-height: 1.6;
   }
 
-  // ─── HOW IT WORKS (Connected Flow) ────────────────────
+
   &__how {
     background: linear-gradient(to bottom, #fff, $color-grey-bg);
     padding: 8rem 2rem;
@@ -409,7 +409,7 @@
   &__step {
     flex: 1;
     min-width: 240px;
-    text-align: left; // Left-aligned looks more premium
+    text-align: left;
     padding: 2.5rem;
     background: #fff;
     border-radius: 20px;
@@ -449,7 +449,7 @@
     }
   }
 
-  // ─── CTA BANNER ────────────────────────────────────────
+
   &__cta-banner {
     padding: 8rem 2rem;
     text-align: center;
@@ -465,7 +465,7 @@
       z-index: 1;
     }
     
-    // Noise/Texture overlay for premium feel
+
     &::after {
       content: '';
       position: absolute;
@@ -479,7 +479,7 @@
       max-width: 700px;
       margin: 0 auto;
       position: relative;
-      z-index: 3; // Keep text above background layers
+      z-index: 3; 
     }
 
     h2 {
@@ -498,7 +498,7 @@
     }
   }
 
-  // ─── FOOTER ────────────────────────────────────────────
+ 
   &__footer {
     background: #0f172a; // Deep slate
     color: rgba(255, 255, 255, 0.6);

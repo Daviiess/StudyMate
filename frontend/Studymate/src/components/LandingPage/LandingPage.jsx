@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import './LandingPage.scss';
 
-// 1. FIXED: Filled in actual marketing copy instead of '...'
+
 const features = [
   { 
     icon: FileUp,      
@@ -82,7 +82,7 @@ const LandingPage = () => {
         <div className="landing-page__nav-inner">
           <div className="landing-page__logo">
             <div className="landing-page__logo-icon">
-              {/* FIXED: Swapped <i> tag for Lucide icon */}
+            
               <Brain size={22} color="#ffffff" strokeWidth={2.5} />
             </div>
             <span className="landing-page__logo-text">StudyMate</span>
@@ -102,7 +102,7 @@ const LandingPage = () => {
       {/* ── HERO ── */}
       <section className="landing-page__hero">
         <div className="landing-page__badge">
-          {/* FIXED: Swapped <i> tag for Lucide icon */}
+          
           <Sparkles size={16} strokeWidth={2.5} />
           AI-powered learning, built for students
         </div>
@@ -123,14 +123,14 @@ const LandingPage = () => {
             onClick={() => navigate('/register')}
           >
             Get started — it's free
-            {/* FIXED: Swapped <i> tag for Lucide icon */}
+        
             <ArrowRight size={18} strokeWidth={2.5} />
           </button>
           <button
             className="btn-lg btn-lg--outline"
             onClick={() => navigate('/login')}
           >
-            {/* FIXED: Swapped <i> tag for Lucide icon */}
+          
             <PlayCircle size={18} strokeWidth={2.5} />
             Log in
           </button>
@@ -164,7 +164,7 @@ const LandingPage = () => {
         </p>
 
         <div className="landing-page__feature-grid">
-          {/* FIXED: Actually rendering the title and description inside the loop */}
+          
           {features.map((f, index) => (
             <div className="landing-page__feature-card" key={index}>
               <div className="landing-page__feat-icon">

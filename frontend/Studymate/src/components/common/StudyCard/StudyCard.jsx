@@ -3,10 +3,9 @@ import React from 'react';
 function StudyCard({ data }) {
   if (!data) return <p>No summary data available.</p>;
 
-  // Bulletproof helper function to handle AI unpredictability
+
   const renderDetails = (details) => {
     
-    // Scenario 1: It's a standard string
     if (typeof details === 'string') {
       return (
         <p style={{ fontSize: 13, color: "#555", lineHeight: 1.5, margin: 0 }}>
@@ -14,8 +13,7 @@ function StudyCard({ data }) {
         </p>
       );
     }
-
-    // Scenario 2: The AI returned a List/Array
+    //If list returned is array
     if (Array.isArray(details)) {
       return (
         <ul style={{ margin: "4px 0 0 0", paddingLeft: "1.2rem", fontSize: 13, color: "#555" }}>
@@ -28,7 +26,7 @@ function StudyCard({ data }) {
       );
     }
 
-    // Scenario 3: The AI returned a Key-Value Object (like the Complexity object)
+    // Scenario 3: The AI returned a Key-Value Object 
     if (typeof details === 'object' && details !== null) {
       return (
         <ul style={{ margin: "4px 0 0 0", paddingLeft: "1.2rem", fontSize: 13, color: "#555" }}>
